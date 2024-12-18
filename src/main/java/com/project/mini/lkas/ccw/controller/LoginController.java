@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.view.RedirectView;
+
 import com.project.mini.lkas.ccw.model.Login;
 import com.project.mini.lkas.ccw.service.LoginService;
 import jakarta.servlet.http.HttpSession;
@@ -41,7 +43,7 @@ public class LoginController {
     
 
     @PostMapping("/validate")
-    public String loginForm(@Valid @ModelAttribute("login") Login login, Model model, HttpSession httpsession) {
+    public RedirectView loginForm(@Valid @ModelAttribute("login") Login login, Model model, HttpSession httpsession) {
 
         Boolean loginSuccess = ls.loginValidation(login.getEmail(), login.getPassword());
 
@@ -50,13 +52,13 @@ public class LoginController {
             model.addAttribute("message",
                     "Invalid login details. Please check your email/id and password. Please try again.");
 
-            return "loginForm";
+            return new RedirectView("loginForm");
 
         } else {
 
             httpsession.setAttribute("loggedInUser", login.getEmail());
 
-            return "home";
+            return new RedirectView("/home");
         }
     }
 
