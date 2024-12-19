@@ -9,11 +9,13 @@ import com.project.mini.lkas.ccw.component.LoginComponent;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
     @Autowired
     private LoginComponent loginInterceptor;
 
     //Forces login view only
     //anything with /home/**/
+    //including /home     /home/cart    /home/recipes/recipe-id
     //Will trigger back to login page no permission to view
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
