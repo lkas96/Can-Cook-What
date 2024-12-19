@@ -28,8 +28,6 @@ public class LoginService {
 
         String valueKey = mp.get(RedisKeys.ccwUsers, email);
 
-        System.out.println(valueKey);
-
         JsonReader jr = Json.createReader(new StringReader(valueKey));
 
         JsonObject jo = jr.readObject();
@@ -38,11 +36,10 @@ public class LoginService {
         // System.out.println(password);
 
         if (password.equals(jo.getString("password"))){
-
+            // System.out.println("correct leh");
             return true;
-
         } else {
-
+            // System.out.println("wrong leh");
             return false; // MMeans incorrect pw
         }
     }
