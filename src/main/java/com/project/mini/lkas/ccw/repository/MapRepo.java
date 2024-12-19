@@ -1,5 +1,6 @@
 package com.project.mini.lkas.ccw.repository;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +50,15 @@ public class MapRepo {
     public Long size(String key) {
         return redisTemplate.opsForHash().size(key);
     }
+
+    public void expire(String redisKey, Long expireValue) {
+        Duration expireDuration = Duration.ofSeconds(expireValue);
+        redisTemplate.expire(redisKey, expireDuration);
+    }
+
+    public void update(String redisKey, String hashKey, String newHashValue) {
+        redisTemplate.opsForHash().put(redisKey, hashKey, newHashValue);
+    }
+
+
 }
