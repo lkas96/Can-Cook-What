@@ -34,14 +34,9 @@ public class UserController {
     @PostMapping("/create")
     public String createUserAccount(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
 
-        System.out.println("printing user object");
-        System.out.println(user);
-
         if (result.hasErrors()) {
             return "registerForm";
         }
-
-        System.out.println(user);
 
         us.createUser(user);
 

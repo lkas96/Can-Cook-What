@@ -44,7 +44,7 @@ public class LoginController {
     
 
     @PostMapping("/validate")
-    public RedirectView loginForm(@Valid @ModelAttribute("login") Login login, RedirectAttributes redirect, HttpSession httpsession) {
+    public RedirectView loginForm(@Valid @ModelAttribute("login") Login login, RedirectAttributes redirect, HttpSession session) {
 
         Boolean loginSuccess = ls.loginValidation(login.getEmail(), login.getPassword());
 
@@ -57,7 +57,7 @@ public class LoginController {
 
         } else {
 
-            httpsession.setAttribute("loggedInUser", login.getEmail());
+            session.setAttribute("currentUser", login.getEmail());
 
             return new RedirectView("/home");
         }
