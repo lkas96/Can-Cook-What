@@ -90,6 +90,9 @@
       </div>
 
       <form method="POST" th:action="@{/basket/create}">
+
+        <input type="hidden" th:value="${basket.id}"/>
+
         <div class="mb-3">
           <label for="name" class="form-label">Basket Name</label>
           <input

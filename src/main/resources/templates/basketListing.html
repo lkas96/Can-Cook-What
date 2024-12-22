@@ -47,7 +47,7 @@
                         </table>
                     </td>
                     <td>
-                        <a class="btn btn-success" th:href="@{/recipe/find/{ingrediets-basket}(ingredients-basket=${eachBasket.ingredients})}">Find a recipe</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a class="btn btn-success" th:href="@{/recipe/find/{basket-id}(basket-id=${eachBasket.id})}">Find a recipe</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <!-- <a class="btn btn-warning" th:href="@{/basket/manage/{basket-name}(basket-name=${eachBasket.name})}">Manage Basket</a><br><br> -->
                         <a class="btn btn-danger" th:href="@{/basket/delete/{basket-name}(basket-name=${eachBasket.name})}">Delete Basket</a>
                     </td>

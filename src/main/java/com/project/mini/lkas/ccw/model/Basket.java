@@ -1,6 +1,7 @@
 package com.project.mini.lkas.ccw.model;
 
 import java.util.List;
+import java.util.UUID;
 
 public class Basket {
 
@@ -8,12 +9,24 @@ public class Basket {
 
     private List<String> ingredients;
 
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public Basket(String name, List<String> ingredients) {
+        this.id = UUID.randomUUID().toString();
         this.name = name;
         this.ingredients = ingredients;
     }
 
-    public Basket() {}
+    public Basket() {
+    }
 
     public String getName() {
         return name;

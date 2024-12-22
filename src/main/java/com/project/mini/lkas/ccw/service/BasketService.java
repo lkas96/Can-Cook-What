@@ -50,6 +50,7 @@ public class BasketService {
 
             // Create a new JsonObject for the new basket
             JsonObject newBasket = Json.createObjectBuilder()
+                    .add("id", basket.getId())
                     .add("basketName", basket.getName())
                     .add("ingredients", ingredArray)
                     .build();
@@ -79,6 +80,7 @@ public class BasketService {
             JsonArray ingredArray = ingredArrayBuilder.build();
 
             JsonObject eachBasket = Json.createObjectBuilder()
+                    .add("id", basket.getId())
                     .add("basketName", basket.getName())
                     .add("ingredients", ingredArray)
                     .build();
@@ -115,6 +117,7 @@ public class BasketService {
                 JsonObject aBasket = basketArray.getJsonObject(i);
 
                 Basket b = new Basket();
+                b.setId(aBasket.getString("id"));
                 b.setName(aBasket.getString("basketName"));
 
                 // Convert json array into List<String>

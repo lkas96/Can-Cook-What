@@ -62,6 +62,7 @@ public class BasketController {
         // System.out.println("PRINTING USERE--------------------");
         // System.out.println(currentUser);
         // System.out.println(b.toString());
+        System.out.println(b.getId());
 
         bs.createBasket(currentUser, b);
 
