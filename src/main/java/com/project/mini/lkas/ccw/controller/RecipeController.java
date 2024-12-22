@@ -1,5 +1,6 @@
 package com.project.mini.lkas.ccw.controller;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.project.mini.lkas.ccw.model.Listing;
+import com.project.mini.lkas.ccw.model.Recipe;
 import com.project.mini.lkas.ccw.service.ListingRestService;
 import com.project.mini.lkas.ccw.service.RecipeService;
 
 import jakarta.servlet.http.HttpSession;
+
 
 
 @Controller
@@ -43,6 +46,27 @@ public class RecipeController {
 
         return "recipeListing";
     }
+
+    @GetMapping("/view/{recipe-id}")
+    public String viewARecipe(@PathVariable("recipe-id") String recipeId, Model model) throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
+
+        //Get the recipe details
+        //Instantiate recipe object
+        Recipe recipe = lrs.getRecipeDetails(recipeId);
+        model.addAttribute("recipe", recipe);
+
+        //Helper method to retrieve the ingredient measurement pair
+        List<String> ingredientMeasurementPair = rs.retrieveIngredientMeasurementPair(recipe);
+        model.addAttribute("pairs", ingredientMeasurementPair);
+
+        //Helper method to put the ingredients into a list for image generation
+        List<String> ingredients = rs.retrieveIngredientList(recipe);
+        model.addAttribute("list", ingredients);
+
+        return "recipeDetails";
+
+    }
+    
     
 
 

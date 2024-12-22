@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recipe Details</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <br>
+      <!-- <h1>Recpies Instructions</h1> -->
+      <!-- <br>
+        <a class="btn btn-primary" th:href="@{/basket/create}">Create New Basket</a>
+      <br><br><br> -->
+
+      <!-- Dispaly basket delete message
+      <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+      </div> -->
+
+
+    <!-- <div class="container">
+      <div th:if="${recipe.size() > 0}">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Dish Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="aRecipe, rows: ${recipe}">
+                  <td><img th:src="${eachListing.strMealThumb}" alt="Recipe Image" style="width: 300px; height: 300px;"/></td>
+                    <td>
+                      <span th:utext="${eachListing.strMeal}"></span><br><br>
+                      <a class="btn btn-success" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View Recipe</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${recipe.size() == 0}">
+        <p>Something is wrong, it should return a recipe. Send help lmao. This should never be shown ever. lmao fingerscrossed.</p>
+    </div> -->
+
+    <div class="container">
+      <h1 th:utext="${recipe.strMeal}"></h1>
+      <br>
+      <img th:src="${recipe.strMealThumb}" alt="Recipe Image" style="width: 500px; height: 500px;"/>
+      <br><br><br><br>
+      <h3>Ingredients & Measurements</h3>
+      <!-- <ul>
+        <li th:each="pair, row : ${pairs}">
+          <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[row.index]} + '.png'" alt="Ingredient Image" style="width: 100px; height: 100px;" />
+          <span th:utext="${pair}"></span>
+        </li>
+      </ul> -->
+      <table style="border-collapse: collapse; width: 100%;">
+        <tbody>
+          <tr th:each="pair, rowStat : ${pairs}" th:if="${rowStat.index % 2 == 0}">
+            <!-- First Column -->
+            <td style="border: none; padding: 10px; text-align: left; width: 50%;">
+              <div th:if="${list[rowStat.index] != null}">
+                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rowStat.index]} + '.png'" 
+                     alt="Ingredient Image" 
+                     style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;" />
+                <span th:utext="${pair}" style="vertical-align: middle;"></span>
+              </div>
+            </td>
+            <!-- Second Column -->
+            <td style="border: none; padding: 10px; text-align: left; width: 50%;" 
+                th:if="${rowStat.index + 1 < pairs.size()}">
+              <div th:if="${list[rowStat.index + 1] != null}">
+                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rowStat.index + 1]} + '.png'" 
+                     alt="Ingredient Image" 
+                     style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;" />
+                <span th:utext="${pairs[rowStat.index + 1]}" style="vertical-align: middle;"></span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <br><br><br>
+      <h3>Instructions</h3>
+      <p th:utext="${recipe.strInstructions}"></p>
+      <br>
+
+
+    </div>
+    
+    </div>
+  </body>
+</html>
