@@ -19,6 +19,6 @@ public class WebConfig implements WebMvcConfigurer {
     //Will trigger back to login page no permission to view
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/home/**", "/basket/**");
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/home/**", "/basket/**", "/recipe/**");
     }
 }
