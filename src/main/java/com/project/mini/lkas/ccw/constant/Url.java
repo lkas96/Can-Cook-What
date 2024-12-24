@@ -13,4 +13,13 @@ public class Url {
     // List all supported ingredients on the mealdb api db
     // www.themealdb.com/api/json/v1/1/list.php?i=list
     public static final String showAllIngredients = "https://www.themealdb.com/api/json/v2/{APIKEY}/list.php?i=list";
+
+    // Get one random recipe
+    // https://www.themealdb.com/api/json/v1/1/random.php
+    public static final String randomOne = "https://www.themealdb.com/api/json/v2/{APIKEY}/random.php";
+
+    //Get 10 rfandom recipes
+    // www.themealdb.com/api/json/v1/1/randomselection.php
+    public static final String randomTen = "https://www.themealdb.com/api/json/v2/{APIKEY}/randomselection.php";
+
 }
