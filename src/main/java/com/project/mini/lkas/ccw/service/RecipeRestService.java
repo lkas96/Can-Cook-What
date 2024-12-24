@@ -31,11 +31,21 @@ public class RecipeRestService {
     RestTemplate restTemplate = new RestTemplate();
 
     public List<Listing> retrieveSavedRecipes(String currentUser) {
+
+        List<Listing> results = new ArrayList<>();
+
+        //check if have existing saved recipes in redis
+        // if not, return empty list else get the redis list and return controller
+        Boolean existingSaved = mp.hashKeyExists(RedisKeys.ccwSavedRecipes, currentUser);
+
+        if (existingSaved == false) {
+            return results;
+
+        }
+
         // take currentuser saved recipes id from redis
         // get the recipe details from external api using the id
         // instantiate listing object again then send it back to controller
-
-        List<Listing> results = new ArrayList<>();
 
         String savedRecipesJson = mp.get(RedisKeys.ccwSavedRecipes, currentUser);
 
