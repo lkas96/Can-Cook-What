@@ -103,16 +103,17 @@
         </div>
       </div>
     </nav>
+
     <div class="container">
       <br>
       <h1>Saved Recipes</h1>
+      <br>
 
       <div th:if="${message}" class="alert alert-success">
         <p th:text="${message}"></p>
+        <br>
       </div>
 
-
-    <div class="container">
       <div th:if="${listings.size() > 0}">
         <table class="table table-dark table-striped">
             <thead>

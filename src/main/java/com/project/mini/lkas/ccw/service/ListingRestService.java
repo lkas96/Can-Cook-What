@@ -256,4 +256,49 @@ public class ListingRestService {
         return results;
     }
 
+    public List<Listing> searchRecipe(String searchString) {
+        
+        //Call the mealdb api add the searchquery to the url
+        //return the list of recipes
+        //bam done
+
+        List<Listing> results = new ArrayList<>();
+
+        String appendUrl1 = Url.searchRecipe.replace("{APIKEY}", LAWSONKEY);
+        String appendUrl2 = appendUrl1.replace("{SEARCHSTRING}", searchString);
+
+        String jsonData = restTemplate.getForObject(appendUrl2, String.class);
+
+        JsonReader jr = Json.createReader(new StringReader(jsonData));
+        JsonObject jo = jr.readObject();
+        
+        //Similar to search by ingredients however this returns thewholl recipe details and not a list of recipes title/images
+        //msut check properly, take out only listing variables from recipe json dump
+
+        if (jo.isNull("meals")) {
+            
+            return results; //return empty array
+
+        } else {
+            JsonArray meals = jo.getJsonArray("meals");
+
+            for (int i = 0; i < meals.size(); i++) {
+
+                JsonObject meal = meals.getJsonObject(i);
+    
+                Listing list = new Listing();
+                list.setStrMeal(meal.getString("strMeal"));
+                list.setStrMealThumb(meal.getString("strMealThumb"));
+                list.setIdMeal(meal.getString("idMeal"));
+    
+                results.add(list);
+            }
+    
+            return results;
+
+        }
+
+        
+    }
+
 }

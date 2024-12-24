@@ -17,6 +17,10 @@ import com.project.mini.lkas.ccw.service.RecipeService;
 
 import jakarta.servlet.http.HttpSession;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+
+
 
 @Controller
 @RequestMapping("/recipe")
@@ -115,7 +119,7 @@ public class RecipeController {
         return "redirect:/recipe/saved";
     }
 
-    @GetMapping("randomOne")
+    @GetMapping("/randomOne")
     public String getRandomRecipe(Model model) throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
         // Call the random recipe api
         Recipe recipe = lrs.getRandomRecipe();
@@ -133,7 +137,7 @@ public class RecipeController {
         return "recipeDetails";
     }
 
-    @GetMapping("randomTen")
+    @GetMapping("/randomTen")
     public String getTenRandomRecipe(Model model) {
         // Call the random recipe api
         List<Listing> listings = lrs.getRandomTenRecipe();
@@ -141,5 +145,20 @@ public class RecipeController {
 
         return "recipeListing";
     }
+
+    @GetMapping("/search")
+    public String displaySearchPage() {
+        return "recipeSearch";
+    }
+
+    @PostMapping("/search")
+    public String searchRecipe(@RequestParam String search, Model model) {
+        List<Listing> listings = lrs.searchRecipe(search);
+        model.addAttribute("listings", listings);
+        
+        return "recipeListing";
+    }
+    
+    
 
 }
