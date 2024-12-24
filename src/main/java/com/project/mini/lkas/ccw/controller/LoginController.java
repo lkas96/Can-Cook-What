@@ -48,15 +48,26 @@ public class LoginController {
 
         Boolean loginSuccess = ls.loginValidation(login.getEmail(), login.getPassword());
 
-        if (loginSuccess == false) {
+        Boolean emailExist = ls.emailExists(login.getEmail());
 
+        if (emailExist == false && loginSuccess == false) {
+
+            //Wrong email
             redirect.addFlashAttribute("message",
-                    "Invalid login details. Please check your email/id and password. Please try again.");
+                    "Email does not exists. Please make sure that it is the email used for registration. Please try again.");
+
+            return new RedirectView("/login");
+
+        } else if (emailExist == true && loginSuccess == false) {
+            
+            //Means wrong password correct email
+            redirect.addFlashAttribute("message", "Incorrect password. Please try again.");
 
             return new RedirectView("/login");
 
         } else {
 
+            //Success, let them log in
             session.setAttribute("loggedInUser", login.getEmail());
 
             return new RedirectView("/home");

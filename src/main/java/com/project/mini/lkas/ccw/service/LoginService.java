@@ -44,4 +44,14 @@ public class LoginService {
         }
     }
 
+    public Boolean emailExists(String email){
+        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email);
+        
+        if (emailExist != true) {
+            return false; // Email not found
+        } else {
+            return true;
+        }
+    }
+
 }
