@@ -73,7 +73,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket}">Find a Recipe using Basket</a>
+                  <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/search}">Search for a Recipe</a>
@@ -110,7 +110,7 @@
 
     <div class="container">
       <br>
-      <h1>Showing all Baskets</h1>
+      <h1 th:utext="${universalTitle}"></h1>
       <br>
         <a class="btn btn-primary" th:href="@{/basket/create}">Create New Basket</a>
       <br><br><br>

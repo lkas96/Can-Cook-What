@@ -30,11 +30,13 @@ public class BasketController {
         List<Basket> baskets = new ArrayList<>();
 
         String currentUser = (String) session.getAttribute("loggedInUser");
-        System.out.println(currentUser);
 
         baskets = bs.getAllBaskets(currentUser);
 
         model.addAttribute("baskets", baskets);
+
+        String title = "Your Baskets";
+        model.addAttribute("universalTitle", title);
 
         return "basketListing";
     }

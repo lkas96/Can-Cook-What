@@ -1,6 +1,7 @@
 package com.project.mini.lkas.ccw.controller;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +10,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import com.project.mini.lkas.ccw.model.Basket;
 import com.project.mini.lkas.ccw.model.Listing;
 import com.project.mini.lkas.ccw.model.Recipe;
+import com.project.mini.lkas.ccw.service.BasketService;
 import com.project.mini.lkas.ccw.service.ListingRestService;
 import com.project.mini.lkas.ccw.service.RecipeRestService;
 import com.project.mini.lkas.ccw.service.RecipeService;
@@ -34,6 +38,9 @@ public class RecipeController {
 
     @Autowired
     private RecipeRestService rrs;
+
+    @Autowired
+    private BasketService bs;
 
     @GetMapping("/find/{basket-id}")
     public String getListOfRecipes(@PathVariable("basket-id") String basketId, HttpSession session, Model model) {
@@ -86,6 +93,9 @@ public class RecipeController {
         String message = "Recipe has been saved successfully.";
         redirect.addFlashAttribute("message", message);
 
+        String title = "Your Saved Recipes";
+        redirect.addFlashAttribute("univeralMessage", title);
+
         return "redirect:/recipe/view/" + recipeId;
     }
 
@@ -96,9 +106,7 @@ public class RecipeController {
 
         List<Listing> listings = rrs.retrieveSavedRecipes(currentUser);
 
-        model.addAttribute("listings", listings);
-
-        System.out.println("Saved Listings: " + listings);
+        model.addAttribute("listings", listings);       
 
         return "saveListing";
 
@@ -143,6 +151,9 @@ public class RecipeController {
         List<Listing> listings = lrs.getRandomTenRecipe();
         model.addAttribute("listings", listings);
 
+        String title = "10 Random Recipes";
+        model.addAttribute("universalTitle", title);
+
         return "recipeListing";
     }
 
@@ -155,8 +166,27 @@ public class RecipeController {
     public String searchRecipe(@RequestParam String search, Model model) {
         List<Listing> listings = lrs.searchRecipe(search);
         model.addAttribute("listings", listings);
+
+        String title = "Matching Recipes";
+        model.addAttribute("universalTitle", title);
         
         return "recipeListing";
+    }
+
+    @GetMapping("/basket")
+    public String searchWithBasket(Model model, HttpSession session){
+        List<Basket> baskets = new ArrayList<>();
+
+        String currentUser = (String) session.getAttribute("loggedInUser");
+
+        baskets = bs.getAllBaskets(currentUser);
+
+        model.addAttribute("baskets", baskets);
+
+        String title = "Search for recipe with a basket";
+        model.addAttribute("universalTitle", title);
+
+        return "basketListing";
     }
     
     

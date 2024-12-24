@@ -73,7 +73,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket}">Find a Recipe using Basket</a>
+                  <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/search}">Search for a Recipe</a>
@@ -110,7 +110,7 @@
 
     <div class="container">
       <br>
-      <h1>Matching Recipes Found</h1>
+      <h1 th:utext="${universalTitle}"></h1>
       <br>
 
       <!-- Dispaly basket delete message
@@ -138,9 +138,7 @@
         </table>
     </div>
     <div th:if="${listings.size() == 0}">
-        <p>No matching recipes found.</p>
-        <p>Reduce your included ingredients or it might be due to API limitation on ingredients.</p>
-        <p>Refer to ingredients FAQ to see all supported ingredients on the external API.</p>
+        <p th:utext="${universalMessage}"></p>
     </div>
     
     </div>
