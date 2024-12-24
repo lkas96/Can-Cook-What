@@ -15,6 +15,8 @@ import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.json.JsonString;
+import jakarta.json.JsonValue;
 
 import com.project.mini.lkas.ccw.constant.Url;
 
@@ -83,58 +85,73 @@ public class ListingRestService {
         String jsonData = restTemplate.getForObject(appendUrl2, String.class);
         JsonReader jr = Json.createReader(new StringReader(jsonData));
         JsonObject jo = jr.readObject();
-        JsonArray meal = jo.getJsonArray("meals");
+        JsonArray meals = jo.getJsonArray("meals");
 
+        // Start index 0, because only have one meal
+        JsonObject mealdata = meals.getJsonObject(0);
+
+    
+        //Use helper method to check for null value thingy
         Recipe recipe = new Recipe(
-                meal.getJsonObject(0).getString("idMeal"),
-                meal.getJsonObject(0).getString("strMeal"),
-                meal.getJsonObject(0).getString("strCategory"),
-                meal.getJsonObject(0).getString("strArea"),
-                meal.getJsonObject(0).getString("strInstructions"),
-                meal.getJsonObject(0).getString("strMealThumb"),
-                meal.getJsonObject(0).getString("strYoutube"),
-                meal.getJsonObject(0).getString("strIngredient1"),
-                meal.getJsonObject(0).getString("strIngredient2"),
-                meal.getJsonObject(0).getString("strIngredient3"),
-                meal.getJsonObject(0).getString("strIngredient4"),
-                meal.getJsonObject(0).getString("strIngredient5"),
-                meal.getJsonObject(0).getString("strIngredient6"),
-                meal.getJsonObject(0).getString("strIngredient7"),
-                meal.getJsonObject(0).getString("strIngredient8"),
-                meal.getJsonObject(0).getString("strIngredient9"),
-                meal.getJsonObject(0).getString("strIngredient10"),
-                meal.getJsonObject(0).getString("strIngredient11"),
-                meal.getJsonObject(0).getString("strIngredient12"),
-                meal.getJsonObject(0).getString("strIngredient13"),
-                meal.getJsonObject(0).getString("strIngredient14"),
-                meal.getJsonObject(0).getString("strIngredient15"),
-                meal.getJsonObject(0).getString("strIngredient16"),
-                meal.getJsonObject(0).getString("strIngredient17"),
-                meal.getJsonObject(0).getString("strIngredient18"),
-                meal.getJsonObject(0).getString("strIngredient19"),
-                meal.getJsonObject(0).getString("strIngredient20"),
-                meal.getJsonObject(0).getString("strMeasure1"),
-                meal.getJsonObject(0).getString("strMeasure2"),
-                meal.getJsonObject(0).getString("strMeasure3"),
-                meal.getJsonObject(0).getString("strMeasure4"),
-                meal.getJsonObject(0).getString("strMeasure5"),
-                meal.getJsonObject(0).getString("strMeasure6"),
-                meal.getJsonObject(0).getString("strMeasure7"),
-                meal.getJsonObject(0).getString("strMeasure8"),
-                meal.getJsonObject(0).getString("strMeasure9"),
-                meal.getJsonObject(0).getString("strMeasure10"),
-                meal.getJsonObject(0).getString("strMeasure11"),
-                meal.getJsonObject(0).getString("strMeasure12"),
-                meal.getJsonObject(0).getString("strMeasure13"),
-                meal.getJsonObject(0).getString("strMeasure14"),
-                meal.getJsonObject(0).getString("strMeasure15"),
-                meal.getJsonObject(0).getString("strMeasure16"),
-                meal.getJsonObject(0).getString("strMeasure17"),
-                meal.getJsonObject(0).getString("strMeasure18"),
-                meal.getJsonObject(0).getString("strMeasure19"),
-                meal.getJsonObject(0).getString("strMeasure20"));
+                getJsonString(mealdata, "idMeal"),
+                getJsonString(mealdata, "strMeal"),
+                getJsonString(mealdata, "strCategory"),
+                getJsonString(mealdata, "strArea"),
+                getJsonString(mealdata, "strInstructions"),
+                getJsonString(mealdata, "strMealThumb"),
+                getJsonString(mealdata, "strYoutube"),
+                getJsonString(mealdata, "strIngredient1"),
+                getJsonString(mealdata, "strIngredient2"),
+                getJsonString(mealdata, "strIngredient3"),
+                getJsonString(mealdata, "strIngredient4"),
+                getJsonString(mealdata, "strIngredient5"),
+                getJsonString(mealdata, "strIngredient6"),
+                getJsonString(mealdata, "strIngredient7"),
+                getJsonString(mealdata, "strIngredient8"),
+                getJsonString(mealdata, "strIngredient9"),
+                getJsonString(mealdata, "strIngredient10"),
+                getJsonString(mealdata, "strIngredient11"),
+                getJsonString(mealdata, "strIngredient12"),
+                getJsonString(mealdata, "strIngredient13"),
+                getJsonString(mealdata, "strIngredient14"),
+                getJsonString(mealdata, "strIngredient15"),
+                getJsonString(mealdata, "strIngredient16"),
+                getJsonString(mealdata, "strIngredient17"),
+                getJsonString(mealdata, "strIngredient18"),
+                getJsonString(mealdata, "strIngredient19"),
+                getJsonString(mealdata, "strIngredient20"),
+                getJsonString(mealdata, "strMeasure1"),
+                getJsonString(mealdata, "strMeasure2"),
+                getJsonString(mealdata, "strMeasure3"),
+                getJsonString(mealdata, "strMeasure4"),
+                getJsonString(mealdata, "strMeasure5"),
+                getJsonString(mealdata, "strMeasure6"),
+                getJsonString(mealdata, "strMeasure7"),
+                getJsonString(mealdata, "strMeasure8"),
+                getJsonString(mealdata, "strMeasure9"),
+                getJsonString(mealdata, "strMeasure10"),
+                getJsonString(mealdata, "strMeasure11"),
+                getJsonString(mealdata, "strMeasure12"),
+                getJsonString(mealdata, "strMeasure13"),
+                getJsonString(mealdata, "strMeasure14"),
+                getJsonString(mealdata, "strMeasure15"),
+                getJsonString(mealdata, "strMeasure16"),
+                getJsonString(mealdata, "strMeasure17"),
+                getJsonString(mealdata, "strMeasure18"),
+                getJsonString(mealdata, "strMeasure19"),
+                getJsonString(mealdata, "strMeasure20"));
 
-                return recipe;
+        return recipe;
+    }
+
+    // Helper method to check for null values in ingredients or the measurement
+    // thingy
+    private String getJsonString(JsonObject jsonObject, String key) {
+        JsonValue value = jsonObject.get(key);
+        if (value != null && value.getValueType() == JsonValue.ValueType.STRING) {
+            return ((JsonString) value).getString();
+        }
+        return null; // Return null if key doesn't exist or isn't a string
     }
 
 }

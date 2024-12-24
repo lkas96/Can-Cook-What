@@ -15,6 +15,8 @@ import com.project.mini.lkas.ccw.service.ListingRestService;
 import com.project.mini.lkas.ccw.service.RecipeService;
 
 import jakarta.servlet.http.HttpSession;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 
 
 
@@ -55,17 +57,31 @@ public class RecipeController {
         Recipe recipe = lrs.getRecipeDetails(recipeId);
         model.addAttribute("recipe", recipe);
 
-        //Helper method to retrieve the ingredient measurement pair
+        //Helper method for ingredient measurement pair
         List<String> ingredientMeasurementPair = rs.retrieveIngredientMeasurementPair(recipe);
         model.addAttribute("pairs", ingredientMeasurementPair);
 
-        //Helper method to put the ingredients into a list for image generation
+        //Helper method for igredient icon thing
         List<String> ingredients = rs.retrieveIngredientList(recipe);
         model.addAttribute("list", ingredients);
 
         return "recipeDetails";
 
     }
+
+    @GetMapping("/save/{recipe-id}")
+    public String saveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session, RedirectAttributes redirect) {
+        
+        //Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+
+        String message = "Recipe has been saved successfully.";
+        redirect.addFlashAttribute("message", message);
+
+        return "redirect:/recipe/view/" + recipeId;
+    }
+    
     
     
 

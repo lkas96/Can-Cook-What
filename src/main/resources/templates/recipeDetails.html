@@ -20,35 +20,10 @@
         <a class="btn btn-primary" th:href="@{/basket/create}">Create New Basket</a>
       <br><br><br> -->
 
-      <!-- Dispaly basket delete message
+      <!-- Dynamic message -->
       <div th:if="${message}" class="alert alert-success">
         <p th:text="${message}"></p>
-      </div> -->
-
-
-    <!-- <div class="container">
-      <div th:if="${recipe.size() > 0}">
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th>Image</th>
-                    <th>Dish Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="aRecipe, rows: ${recipe}">
-                  <td><img th:src="${eachListing.strMealThumb}" alt="Recipe Image" style="width: 300px; height: 300px;"/></td>
-                    <td>
-                      <span th:utext="${eachListing.strMeal}"></span><br><br>
-                      <a class="btn btn-success" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View Recipe</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div th:if="${recipe.size() == 0}">
-        <p>Something is wrong, it should return a recipe. Send help lmao. This should never be shown ever. lmao fingerscrossed.</p>
-    </div> -->
+      </div>
 
     <div class="container">
       <h1 th:utext="${recipe.strMeal}"></h1>
@@ -64,11 +39,11 @@
       </ul> -->
       <table style="border-collapse: collapse; width: 100%;">
         <tbody>
-          <tr th:each="pair, rowStat : ${pairs}" th:if="${rowStat.index % 2 == 0}">
+          <tr th:each="pair, rows : ${pairs}" th:if="${rows.index % 2 == 0}">
             <!-- First Column -->
             <td style="border: none; padding: 10px; text-align: left; width: 50%;">
-              <div th:if="${list[rowStat.index] != null}">
-                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rowStat.index]} + '.png'" 
+              <div th:if="${list[rows.index] != null}">
+                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rows.index]} + '.png'" 
                      alt="Ingredient Image" 
                      style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;" />
                 <span th:utext="${pair}" style="vertical-align: middle;"></span>
@@ -76,12 +51,12 @@
             </td>
             <!-- Second Column -->
             <td style="border: none; padding: 10px; text-align: left; width: 50%;" 
-                th:if="${rowStat.index + 1 < pairs.size()}">
-              <div th:if="${list[rowStat.index + 1] != null}">
-                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rowStat.index + 1]} + '.png'" 
+                th:if="${rows.index + 1 < pairs.size()}">
+              <div th:if="${list[rows.index + 1] != null}">
+                <img th:src="'https://www.themealdb.com/images/ingredients/' + ${list[rows.index + 1]} + '.png'" 
                      alt="Ingredient Image" 
                      style="width: 50px; height: 50px; vertical-align: middle; margin-right: 10px;" />
-                <span th:utext="${pairs[rowStat.index + 1]}" style="vertical-align: middle;"></span>
+                <span th:utext="${pairs[rows.index + 1]}" style="vertical-align: middle;"></span>
               </div>
             </td>
           </tr>
@@ -91,8 +66,10 @@
       <br><br><br>
       <h3>Instructions</h3>
       <p th:utext="${recipe.strInstructions}"></p>
-      <br>
+      <br><br><br>
 
+      <a class="btn btn-primary" th:href="@{/recipe/save/{recipe-id}(recipe-id=${recipe.idMeal})}">Save This Recipe!</a>
+      <br><br><br><br><br><br>
 
     </div>
     

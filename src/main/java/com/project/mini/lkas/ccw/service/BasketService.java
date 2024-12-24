@@ -89,7 +89,6 @@ public class BasketService {
 
             // "nested"
             JsonObject basketRecords = Json.createObjectBuilder()
-                    .add("email", user)
                     .add("baskets", basketArray)
                     .build();
 
