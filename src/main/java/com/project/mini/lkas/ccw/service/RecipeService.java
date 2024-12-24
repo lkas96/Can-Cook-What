@@ -171,6 +171,42 @@ public class RecipeService {
             mp.create(RedisKeys.ccwSavedRecipes, user, savedRecords.toString());
         }
     }
+
+    public void deleteSavedRecipe(String currentUser, String recipeId) {
+        
+        String existingSavedRecipes = mp.get(RedisKeys.ccwSavedRecipes, currentUser);
+
+        JsonReader jr = Json.createReader(new StringReader(existingSavedRecipes));
+        JsonObject savedRecords = jr.readObject();
+        JsonArray savedArray = savedRecords.getJsonArray("recipe_id");
+
+        System.out.println("Saved Array: " + savedArray);
+
+        JsonArrayBuilder updatedArray = Json.createArrayBuilder();
+
+        //Add the ID that dont matches into updated array then replace it after
+        for (JsonValue value : savedArray) {
+            
+            //cast to string to compare if not its cmparing "example" with example
+            //the quiotation marks, so cannot work
+            //replace the '"' with "" to remove the quotation marks
+            String valueString = value.toString().replace("\"", "");
+
+            if (!valueString.toString().equals(recipeId)) {
+                System.out.println(value);
+                updatedArray.add(value);
+            }
+        }
+
+        System.out.println("Updated Array: " + updatedArray.toString());
+
+        JsonObject updatedRecords = Json.createObjectBuilder()
+                                        .add("recipe_id", updatedArray)
+                                        .build();
+
+        mp.update(RedisKeys.ccwSavedRecipes, currentUser, updatedRecords.toString());
+
+    }
     
 
 }
