@@ -21,9 +21,12 @@
     <h1>Log In</h1>
     <br>
 
-    <!-- Display login failed -->
     <div th:if="${message}" class="alert alert-danger">
         <p th:text="${message}"></p>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success">
+      <p th:text="${success}"></p>
     </div>
 
 

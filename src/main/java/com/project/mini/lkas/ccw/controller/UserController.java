@@ -5,6 +5,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.project.mini.lkas.ccw.model.User;
 import com.project.mini.lkas.ccw.service.UserService;
 
@@ -32,7 +34,7 @@ public class UserController {
     }
 
     @PostMapping("/create")
-    public String createUserAccount(@Valid @ModelAttribute("user") User user, BindingResult result, Model model) {
+    public String createUserAccount(@Valid @ModelAttribute("user") User user, BindingResult result, Model model, RedirectAttributes redirect) {
 
         if (result.hasErrors()) {
             return "registerForm";
@@ -51,11 +53,9 @@ public class UserController {
 
         us.createUser(user);
 
-        String welcomeMessage = "Registered successfully! You may now login.";
+        redirect.addFlashAttribute("success", "Registration successful. Welcome to the CCW family! You may now log in. 😊");
 
-        model.addAttribute("message", welcomeMessage);
-
-        return "registerForm";
+        return "redirect:/login";
     }
 
 }

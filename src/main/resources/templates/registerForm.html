@@ -21,11 +21,11 @@
     <h1>Create an account!</h1>
     <br>
 
-    <!-- Display message when account created successfully -->
+    <!-- Display message when account created successfully
     <div th:if="${message}" class="alert alert-success">
         <p th:text="${message}"></p>
         <a th:href="@{/login}" class="btn btn-primary">Go to Login</a>
-    </div>
+    </div> -->
 
     <form method="POST" th:action="@{/register/create}" th:object="${user}">
 
