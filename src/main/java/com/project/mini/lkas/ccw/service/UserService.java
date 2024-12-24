@@ -27,4 +27,16 @@ public class UserService {
         mp.create(RedisKeys.ccwUsers, user.getEmail().toString(), jo.toString());
     }
 
+    public Boolean emailRegistered(String email) {
+        //Check against redis db
+
+        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email);
+
+        if (emailExist == true) {
+            return true; // Email exists
+        } else {
+            return false; // Email not registeterd yet, allow proceed registering
+        }
+    }
+
 }

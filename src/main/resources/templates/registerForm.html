@@ -39,7 +39,10 @@
             <label for="email" class="form-label">Email</label>
             <input type="email" class="form-control" th:field="*{email}">
             <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-          </div>
+        </div>
+        <div th:if="${emailUsed}" class="alert alert-danger">
+          <p th:text="${emailUsed}"></p>
+      </div>
 
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>

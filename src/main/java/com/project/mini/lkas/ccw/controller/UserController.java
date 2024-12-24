@@ -38,6 +38,17 @@ public class UserController {
             return "registerForm";
         }
 
+        //ADD VALIDATION FOR EXISTING EMAIL
+        Boolean emailRegistered = us.emailRegistered(user.getEmail());
+
+        if (emailRegistered == true) {
+            String message = "Email already registered. Please use another email.";
+
+            model.addAttribute("emailUsed", message);
+
+            return "registerForm";
+        }
+
         us.createUser(user);
 
         String welcomeMessage = "Registered successfully! You may now login.";
