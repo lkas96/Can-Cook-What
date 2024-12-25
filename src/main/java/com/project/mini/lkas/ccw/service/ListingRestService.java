@@ -76,7 +76,7 @@ public class ListingRestService {
 
         // Take recipe ID, then call the API get details of the recipe
 
-        System.out.println("IN REST SERVICE NOW ------------------------------------------");
+        // System.out.println("IN REST SERVICE NOW ------------------------------------------");
         String appendUrl1 = Url.searchByMealId.replace("{APIKEY}", LAWSONKEY);
         String appendUrl2 = appendUrl1.replace("{MEALID}", recipeId);
 
