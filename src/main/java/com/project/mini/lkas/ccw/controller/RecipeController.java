@@ -62,7 +62,7 @@ public class RecipeController {
     }
 
     @GetMapping("/view/{recipe-id}")
-    public String viewARecipe(@PathVariable("recipe-id") String recipeId, Model model)
+    public String viewARecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session)
             throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
 
         // Get the recipe details
@@ -77,6 +77,10 @@ public class RecipeController {
         // Helper method for igredient icon thing
         List<String> ingredients = rs.retrieveIngredientList(recipe);
         model.addAttribute("list", ingredients);
+
+        //Save the most current recipe details to session
+        //Used in ReviewController.java
+        session.setAttribute("currentRecipe", recipe);
 
         return "recipeDetails";
 
@@ -128,7 +132,7 @@ public class RecipeController {
     }
 
     @GetMapping("/randomOne")
-    public String getRandomRecipe(Model model) throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
+    public String getRandomRecipe(Model model, HttpSession session) throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
         // Call the random recipe api
         Recipe recipe = lrs.getRandomRecipe();
         model.addAttribute("recipe", recipe);
@@ -141,6 +145,10 @@ public class RecipeController {
         // Helper method for igredient icon thing
         List<String> ingredients = rs.retrieveIngredientList(recipe);
         model.addAttribute("list", ingredients);
+
+        //Save the most current recipe details to session
+        //Used in ReviewController.java
+        session.setAttribute("currentRecipe", recipe);
 
         return "recipeDetails";
     }
