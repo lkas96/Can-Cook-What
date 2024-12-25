@@ -89,17 +89,30 @@
           </li>
 
           <!-- Item 4-->
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
-
-          <!-- Item 5-->
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Reviews
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" th:href="@{/review/community}">Community Reviews</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
+              </li>
+              </li>
+            </ul>
           </li>
           
         </ul>
         <div class="d-flex">
+          <a class="btn btn-outline-light" href="https://cancookwhatcommunity.blogspot.com/">Blog Reviews</a>&nbsp;&nbsp;&nbsp;
           <a class="btn btn-danger" th:href="@{/logout}">Logout</a>
         </div>
       </div>
