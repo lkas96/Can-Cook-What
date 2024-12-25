@@ -157,7 +157,8 @@
       <p th:utext="${recipe.strInstructions}"></p>
       <br><br><br>
 
-      <a class="btn btn-primary" th:href="@{/recipe/save/{recipe-id}(recipe-id=${recipe.idMeal})}">Save This Recipe!</a>
+      <a class="btn btn-primary" th:href="@{/recipe/save/{recipe-id}(recipe-id=${recipe.idMeal})}">Save This Recipe!</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      <a class="btn btn-primary" th:href="@{/review}">Write a review</a>
       <br><br><br><br><br><br>
 
     </div>
