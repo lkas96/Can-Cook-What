@@ -26,4 +26,11 @@ public class Url {
     // www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
     public static final String searchRecipe = "https://www.themealdb.com/api/json/v2/{APIKEY}/search.php?s={SEARCHSTRING}";
 
+    //BLOGGER POST URL
+    //www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
+    public static final String postToBlogger = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/";
+
+    //BLOGGER REFERSH OAUTH2 TOKEN
+    //https://oauth2.googleapis.com/token?
+    public static final String refreshAuthCode = "https://oauth2.googleapis.com/token";
 }
