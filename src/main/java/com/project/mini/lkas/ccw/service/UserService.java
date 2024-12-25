@@ -1,5 +1,7 @@
 package com.project.mini.lkas.ccw.service;
 
+import java.io.StringReader;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +11,7 @@ import com.project.mini.lkas.ccw.repository.MapRepo;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
 
 @Service
 public class UserService {
@@ -37,6 +40,18 @@ public class UserService {
         } else {
             return false; // Email not registeterd yet, allow proceed registering
         }
+    }
+
+    public String getUser(String email){
+
+        String userData = mp.get(RedisKeys.ccwUsers, email);
+
+        JsonReader jr = Json.createReader(new StringReader(userData));
+        JsonObject jo = jr.readObject();
+
+        String retrievedName = jo.getString("name");
+
+        return retrievedName;
     }
 
 }
