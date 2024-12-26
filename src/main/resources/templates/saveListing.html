@@ -102,7 +102,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/community}">Community Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
@@ -127,7 +127,6 @@
 
       <div th:if="${message}" class="alert alert-success">
         <p th:text="${message}"></p>
-        <br>
       </div>
 
       <div th:if="${listings.size() > 0}">
