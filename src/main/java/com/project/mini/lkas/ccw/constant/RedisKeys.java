@@ -15,6 +15,6 @@ public class RedisKeys {
     public static final String ccwContainers = "ccwContainers";
 
     //Personal Cooking log
-    public static final String ccwLogbooks = "ccwLogbooks";
+    public static final String ccwReviews = "ccwReviews";
 
 }
