@@ -128,16 +128,25 @@ public class ReviewController {
     @GetMapping("/myreviews")
     public String displayMyReviews(Model model, HttpSession session) {
 
-        // get user from session
         String currentUserEmail = (String) session.getAttribute("loggedInUser");
 
-        // get current review object
         List<Review> reviews = rs.getReviews(currentUserEmail);
 
         model.addAttribute("reviews", reviews);
 
         return "reviewListing";
 
+    }
+
+    @GetMapping("/allreviews")
+    public String displayAllReviews(Model model, HttpSession session) {
+
+        List<Review> reviews = rs.getAllReviews();
+
+        model.addAttribute("reviews", reviews);
+
+        return "reviewListing";
+        
     }
 
 }
