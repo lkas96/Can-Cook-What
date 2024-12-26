@@ -60,5 +60,11 @@ public class MapRepo {
         redisTemplate.opsForHash().put(redisKey, hashKey, newHashValue);
     }
 
+    //Check if the key exists
+    //Dont need to bother with hashkey/hashvalue
+    public Boolean keyExists(String redisKey) {
+        return redisTemplate.hasKey(redisKey);
+    }
+
 
 }
