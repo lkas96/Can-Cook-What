@@ -92,8 +92,6 @@ public class BasketService {
                     .add("baskets", basketArray)
                     .build();
 
-            System.out.println(basketRecords.toString());
-
             mp.create(RedisKeys.ccwContainers, user, basketRecords.toString());
         }
 
