@@ -139,7 +139,6 @@
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Reviewed On</th>
                     <th>Dish</th>
                     <th>Review</th>
                     <th>Actions</th>
@@ -148,21 +147,21 @@
             <tbody>
                 <tr th:each="eachReview : ${reviews}">
                   <td>
-                    <span th:text="${eachReview.helperDate}"></span>
-                  </td>
-                  <td>
                     <h4 th:text="${eachReview.mealTitle}"></h4>
-                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 200px; height: 200px;">
+                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 300px; height: 300px;">
                   </td>
                   <td>
                     <span th:text="${eachReview.reviewTitle}" style="text-decoration: underline;"></span>
                     <br><br>
                     <span th:text="${eachReview.reviewMessage}"></span>
+                    <br><br>Reviewed By:<br>
+                    <span th:text="${eachReview.name}"></span> on
+                    <span th:text="${eachReview.helperDate}"></span>
                   </td>
                   <td>
                     <a class="btn btn-warning" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
                     <br><br>
-                    <a class="btn btn-success" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View Recipe</a>
+                    <a class="btn btn-success" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View The Recipe</a>
                     <br><br>
                     <a class="btn btn-danger" th:href="@{/review/delete/{post-id}(post-id=${eachReview.postId})}">Delete</a>
                   </td>
