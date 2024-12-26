@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Reviews</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap JS and Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">CanCookWhat</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <!-- Item 1-->
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
+            </li>
+  
+            <!-- Item 2-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Basket
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" th:href="@{/basket}">View Baskets</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/basket/create}"
+                    >Create a Basket</a
+                  >
+                </li>
+              </ul>
+            </li>
+  
+            <!-- Item 3-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Recipes
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/search}">Search for a Recipe</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/randomOne}">1 Random Recipe</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/randomTen}">10 Random Recipes</a>
+                </li>
+              </ul>
+            </li>
+  
+            <!-- Item 4-->
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Reviews
+              </a>
+              <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
+                </li>
+                </li>
+              </ul>
+            </li>
+            
+          </ul>
+          <div class="d-flex">
+            <a class="btn btn-outline-light" href="https://cancookwhatcommunity.blogspot.com/">Blog Reviews</a>&nbsp;&nbsp;&nbsp;
+            <a class="btn btn-danger" th:href="@{/logout}">Logout</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <br>
+      <h1>Community Reviews</h1>
+      <br>
+
+      <div th:if="${message}" class="alert alert-success">
+        <p th:text="${message}"></p>
+        <br>
+      </div>
+
+      <div th:if="${message2}" class="alert alert-danger">
+        <p th:text="${message2}"></p>
+        <br>
+      </div>
+
+      <div th:if="${allreviews.size() > 0}">
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Reviewed On</th>
+                    <th>Dish</th>
+                    <th>Review</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="eachReview : ${allreviews}">
+                  <td>
+                    <span th:text="${eachReview.helperDate}"></span>
+                  </td>
+                  <td>
+                    <h4 th:text="${eachReview.mealTitle}"></h4>
+                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 200px; height: 200px;">
+                  </td>
+                  <td>
+                    <span th:text="${eachReview.reviewTitle}" style="text-decoration: underline;"></span>
+                    <br><br>
+                    <span th:text="${eachReview.reviewMessage}"></span>
+                    <br><br>Reviewed By:<br>
+                    <span th:text="${eachReview.name}"></span> on
+                    <span th:text="${eachReview.helperDate}"></span>
+                  </td>
+                  <td>
+                    <a class="btn btn-warning" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
+                    <br><br>
+                    <a class="btn btn-success" th:href="@{/recie/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View Recipe</a>
+                  </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:if="${allreviews.size() == 0}">
+        <p>You have not left any reviews. You can check out the community reviews or whip something up too.</p>
+    </div>
+    
+    </div>
+  </body>
+</html>

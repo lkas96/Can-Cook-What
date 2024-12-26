@@ -100,9 +100,9 @@ public class ReviewController {
 
         List<Review> reviews = rs.getAllReviews();
 
-        model.addAttribute("reviews", reviews);
+        model.addAttribute("allreviews", reviews);
 
-        return "allReviewListing";
+        return "reviewListingAll";
 
     }
 
