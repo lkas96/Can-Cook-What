@@ -1,9 +1,12 @@
 package com.project.mini.lkas.ccw.service;
 
 import java.io.StringReader;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,17 +24,16 @@ import com.project.mini.lkas.ccw.repository.MapRepo;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
+import jakarta.json.JsonValue;
 
 @Service
 public class ReviewService {
 
     @Autowired
     private MapRepo mp;
-
-    @Value("${blogger.blog.id}")
-    private String blogid;
 
     @Value("${blogger.client.id}")
     private String clientId;
@@ -42,21 +44,20 @@ public class ReviewService {
     @Value("${blogger.refresh.token}")
     private String refreshToken;
 
+    @Value("${blogger.blog.id}")
+    private String blogId;
+
+    @Value("${blogger.api.key}")
+    private String apiKey;
+
     RestTemplate restTemplate = new RestTemplate();
 
+    // Helper method broken down
+    // Used for postToBlogger method
     public JsonObject createJsonData(Review review) {
 
-        // {
-        // "kind": "blogger#post",
-        // "blog": {
-        // "id": "8070105920543249955"
-        // },
-        // "title": "A new post",
-        // "content": "With <b>exciting</b> content..."
-        // }
-
         // Create body content first.
-        String title = "<h1>Review for " + review.getMealTitle() + "</h1>";
+        String title = "Review for " + review.getMealTitle();
 
         String body2 = "Reviewed by : " + review.getName() + "<br><br>";
         String body3 = "<img src='" + review.getMealPicture() + "'><br><br>";
@@ -67,7 +68,7 @@ public class ReviewService {
         String content = body2 + body3 + body4 + body5;
 
         // Create json object by parts first
-        JsonObject bid = Json.createObjectBuilder().add("id", blogid).build();
+        JsonObject bid = Json.createObjectBuilder().add("id", blogId).build();
 
         JsonObject built = Json.createObjectBuilder()
                 .add("kind", "blogger#post")
@@ -80,6 +81,8 @@ public class ReviewService {
 
     }
 
+    // Helper method broken down
+    // Used for postToBlogger method
     public String refreshAuthCode() {
 
         // do the request nbody
@@ -113,6 +116,60 @@ public class ReviewService {
 
     }
 
+    public Boolean postToBlogger(Review review) {
+
+        // Prepare json data for external send to blogger api
+        JsonObject jsonPayload = createJsonData(review);
+
+        // refresh the authcode
+        String authCode = refreshAuthCode();
+
+        // https://developers.google.com/blogger/docs/3.0/using#AddingAPost
+        // POST https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
+        // Authorization: /* OAuth 2.0 token here */
+        // Content-Type: application/json
+
+        String appendedUrl = Url.postToBlogger.replace("{BLOGID}", blogId);
+        String appendedUrl2 = appendedUrl + "?key=" + apiKey;
+
+        RequestEntity<String> request = RequestEntity
+                .post(appendedUrl2)
+                .header("Authorization", "Bearer " + authCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonPayload.toString(), String.class);
+
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
+        // Take response and extract the new token
+        JsonReader jr = Json.createReader(new StringReader(response.getBody()));
+        JsonObject jo = jr.readObject();
+
+        // Extract the url and date published and add it to the review object
+        // then add review object into redis records
+
+        String url = jo.getString("url");
+        review.setBloggerUrl(url);
+
+        // Parse the input string to ZonedDateTime
+        String published = jo.getString("published");
+
+        // Parse the input string to ZonedDateTime
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(published);
+
+        // Convert ZonedDateTime to epoch (seconds since Unix epoch)
+        long epoch = zonedDateTime.toEpochSecond();
+
+        review.setPublishOnEpoch(epoch);
+
+        String postId = jo.getString("id");
+        review.setPostId(postId);
+
+        // Add review to redis
+        saveReview(review);
+
+        return true;
+    }
+
     public void saveReview(Review review) {
         // Stringyfy the review object json
         // format goal json is like
@@ -141,7 +198,8 @@ public class ReviewService {
                     .add("reviewTitle", review.getReviewTitle())
                     .add("reviewMessage", review.getReviewMessage())
                     .add("bloggerUrl", review.getBloggerUrl())
-                    .add("publishedOn", review.getPublishedOn())
+                    .add("publishOnEpoch", review.getPublishOnEpoch())
+                    .add("postId", review.getPostId())
                     .build();
 
             // add new entry to the array [{existing entry}, {added entry}]
@@ -168,7 +226,8 @@ public class ReviewService {
                     .add("reviewTitle", review.getReviewTitle())
                     .add("reviewMessage", review.getReviewMessage())
                     .add("bloggerUrl", review.getBloggerUrl())
-                    .add("publishedOn", review.getPublishedOn())
+                    .add("publishOnEpoch", review.getPublishOnEpoch())
+                    .add("postId", review.getPostId())
                     .build();
 
             JsonArray reviewArray = Json.createArrayBuilder().add(aReview).build();
@@ -206,11 +265,34 @@ public class ReviewService {
                 r.setReviewTitle(aReview.getString("reviewTitle"));
                 r.setReviewMessage(aReview.getString("reviewMessage"));
                 r.setBloggerUrl(aReview.getString("bloggerUrl"));
-                r.setPublishedOn(aReview.getString("publishedOn"));
+
+                JsonValue publishOnEpochValue = aReview.get("publishOnEpoch");
+                long publishOnEpoch = ((JsonNumber) publishOnEpochValue).longValue();
+                r.setPublishOnEpoch(publishOnEpoch);
+
+                r.setPostId(aReview.getString("postId"));
+
+                // Use helper instance variable in model to correct date fix
+                // epoch to whatever format I want sickeningass stupid ass timezones and shit
+                // I am too dumb for this
+                // Convert epoch time to Instant
+                Instant instant = Instant.ofEpochSecond(publishOnEpoch);
+
+                // Convert to Singapore time zone (Asia/Singapore)
+                ZonedDateTime singaporeTime = instant.atZone(ZoneId.of("Asia/Singapore"));
+
+                // Format the date and time in the desired format
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+                String formattedDate = singaporeTime.format(formatter);
+                r.setHelperDate(formattedDate);
 
                 retrieved.add(r);
 
             }
+
+            // sort by epoch date
+            // latest review first
+            retrieved.sort(Comparator.comparingLong(Review::getPublishOnEpoch).reversed());
 
             // RETURN POPULATED REVIEW LIST
             return retrieved;
@@ -253,23 +335,35 @@ public class ReviewService {
                     r.setReviewTitle(aReview.getString("reviewTitle"));
                     r.setReviewMessage(aReview.getString("reviewMessage"));
                     r.setBloggerUrl(aReview.getString("bloggerUrl"));
-                    r.setPublishedOn(aReview.getString("publishedOn"));
+
+                    JsonValue publishOnEpochValue = aReview.get("publishOnEpoch");
+                    long publishOnEpoch = ((JsonNumber) publishOnEpochValue).longValue();
+                    r.setPublishOnEpoch(publishOnEpoch);
+
+                    r.setPostId(aReview.getString("postId"));
+
+                    // Use helper instance variable in model to correct date fix
+                    // epoch to whatever format I want sickeningass stupid ass timezones and shit
+                    // I am too dumb for this
+                    // Convert epoch time to Instant
+                    Instant instant = Instant.ofEpochSecond(publishOnEpoch);
+
+                    // Convert to Singapore time zone (Asia/Singapore)
+                    ZonedDateTime singaporeTime = instant.atZone(ZoneId.of("Asia/Singapore"));
+
+                    // Format the date and time in the desired format
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+                    String formattedDate = singaporeTime.format(formatter);
+                    r.setHelperDate(formattedDate);
 
                     retrieved.add(r);
                 }
             }
 
-            // Sort the list by publishedOn date in descending order (latest first)
-            retrieved.sort((r1, r2) -> {
-                // Parse the 'publishedOn' string to ZonedDateTime
-                DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
-                ZonedDateTime date1 = ZonedDateTime.parse(r1.getPublishedOn(), formatter);
-                ZonedDateTime date2 = ZonedDateTime.parse(r2.getPublishedOn(), formatter);
+            // sort by epoch date
+            // latest review first
+            retrieved.sort(Comparator.comparingLong(Review::getPublishOnEpoch).reversed());
 
-                // Sort in descending order (latest first)
-                return date2.compareTo(date1);
-            });
-            
             // RETURN POPULATED REVIEW LIST
             return retrieved;
 

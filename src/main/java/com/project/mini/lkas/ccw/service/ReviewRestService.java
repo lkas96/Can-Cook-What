@@ -27,7 +27,7 @@ public class ReviewRestService {
         private String apiKey;
 
     public List<Post> getAllReviews() {
-        
+
         String appendUrl1 = Url.getAllPosts.replace("{BLOGID}", blogId);
         String appendUrl2 = appendUrl1.replace("{APIKEY}",apiKey);
         String appendUrl3 = appendUrl2.replace("{HOWMANYPOSTS}", "500");

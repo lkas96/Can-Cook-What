@@ -18,7 +18,27 @@ public class Review {
 
     // part 4
     private String bloggerUrl;
-    private String publishedOn;
+    private Long publishOnEpoch;
+    private String postId;
+
+    //Part 5
+    private String helperDate;
+
+    public String getHelperDate() {
+        return helperDate;
+    }
+
+    public void setHelperDate(String helperDate) {
+        this.helperDate = helperDate;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
+    }
 
     public String getName() {
         return name;
@@ -35,14 +55,6 @@ public class Review {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    // public String getPostedDate() {
-    //     return postedDate;
-    // }
-
-    // public void setPostedDate(String postedDate) {
-    //     this.postedDate = postedDate;
-    // }
 
     public String getIdMeal() {
         return idMeal;
@@ -92,12 +104,12 @@ public class Review {
         this.bloggerUrl = bloggerUrl;
     }
 
-    public String getPublishedOn() {
-        return publishedOn;
+    public Long getPublishOnEpoch() {
+        return publishOnEpoch;
     }
 
-    public void setPublishedOn(String publishedOn) {
-        this.publishedOn = publishedOn;
+    public void setPublishOnEpoch(Long publishOnEpoch) {
+        this.publishOnEpoch = publishOnEpoch;
     }
 
     public Review(String name, String email, String idMeal, String mealTitle, String mealPicture,
@@ -118,7 +130,7 @@ public class Review {
     public String toString() {
         return "Review [name=" + name + ", email=" + email + ", idMeal=" + idMeal + ", mealTitle=" + mealTitle
                 + ", mealPicture=" + mealPicture + ", reviewTitle=" + reviewTitle + ", reviewMessage=" + reviewMessage
-                + ", bloggerUrl=" + bloggerUrl + ", publishedOn=" + publishedOn + "]";
+                + ", bloggerUrl=" + bloggerUrl + ", publishOnEpoch=" + publishOnEpoch + "]";
     }
 
 

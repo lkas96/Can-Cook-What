@@ -1,27 +1,18 @@
 package com.project.mini.lkas.ccw.controller;
 
-import java.io.StringReader;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.project.mini.lkas.ccw.constant.Url;
 import com.project.mini.lkas.ccw.model.Recipe;
 import com.project.mini.lkas.ccw.model.Review;
 import com.project.mini.lkas.ccw.service.ReviewService;
 import com.project.mini.lkas.ccw.service.UserService;
 
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonReader;
 import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,14 +29,6 @@ public class ReviewController {
     @Autowired
     private ReviewService rs;
 
-    RestTemplate restTemplate = new RestTemplate();
-
-    @Value("${blogger.blog.id}")
-    private String blogId;
-
-    @Value("${blogger.api.key}")
-    private String apiKey;
-
     @GetMapping("")
     public String displayForm(Model model, HttpSession session) {
 
@@ -60,14 +43,8 @@ public class ReviewController {
 
         Review rev = new Review();
 
-        // in regular cotroller
-        System.out.println("currentUserName: " + currentUserName);
-        System.out.println("currentUserEmail: " + currentUserEmail);
-
         rev.setName(currentUserName);
         rev.setEmail(currentUserEmail);
-
-        System.out.println("Review: " + rev.toString());
 
         model.addAttribute("review", rev);
         model.addAttribute("currentName", currentUserName);
@@ -77,7 +54,7 @@ public class ReviewController {
     }
 
     @PostMapping("/new")
-    public String createReview(@ModelAttribute Review review, HttpSession session) {
+    public String createReview(@ModelAttribute Review review, HttpSession session, RedirectAttributes redirect) {
 
         // haven add the recipe details yet part 2 of model
         Recipe current = (Recipe) session.getAttribute("currentRecipe");
@@ -85,44 +62,23 @@ public class ReviewController {
         review.setMealTitle(current.getStrMeal()); // get dish name
         review.setMealPicture(current.getStrMealThumb()); // get thumbnail
 
-        // Prepare json data for external send to blogger api
-        JsonObject jsonPayload = rs.createJsonData(review);
+        Boolean successful = rs.postToBlogger(review);
 
-        // refresh the authcode
-        String authCode = rs.refreshAuthCode();
+        if (successful == true) {
 
-        // https://developers.google.com/blogger/docs/3.0/using#AddingAPost
-        // POST https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
-        // Authorization: /* OAuth 2.0 token here */
-        // Content-Type: application/json
+            String message = "Review posted successfully!";
+            redirect.addFlashAttribute("message", message);
 
-        String appendedUrl = Url.postToBlogger.replace("{BLOGID}", blogId);
-        String appendedUrl2 = appendedUrl + "?key=" + apiKey;
+            return "redirect:/review/myreviews";
 
-        RequestEntity<String> request = RequestEntity
-                .post(appendedUrl2)
-                .header("Authorization", "Bearer " + authCode)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(jsonPayload.toString(), String.class);
+        } else {
 
-        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+            String message = "Review posting failed!";
+            redirect.addFlashAttribute("message2", message);
 
-        // Take response and extract the new token
-        JsonReader jr = Json.createReader(new StringReader(response.getBody()));
-        JsonObject jo = jr.readObject();
+            return "redirect:/review/new";
 
-        // Extract the url and date published and add it to the review object
-        // then add review object into redis records
-
-        String url = jo.getString("url");
-        String published = jo.getString("published");
-        review.setBloggerUrl(url);
-        review.setPublishedOn(published);
-
-        // Add review to redis
-        rs.saveReview(review);
-
-        return "redirect:/review/myreviews";
+        }
     }
 
     @GetMapping("/myreviews")
@@ -145,8 +101,8 @@ public class ReviewController {
 
         model.addAttribute("reviews", reviews);
 
-        return "reviewListing";
-        
+        return "allReviewListing";
+
     }
 
 }
