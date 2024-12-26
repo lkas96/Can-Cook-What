@@ -33,4 +33,10 @@ public class Url {
     //BLOGGER REFERSH OAUTH2 TOKEN
     //https://oauth2.googleapis.com/token?
     public static final String refreshAuthCode = "https://oauth2.googleapis.com/token";
+
+    //GET ALL BLOGGER POSTS
+    //     https://www.googleapis.com/blogger/v3/blogs/blogid/posts?key=APIKEY&maxResults=ANYNUMBER
+    public static final String getAllPosts = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts?key={APIKEY}&maxResults={HOWMANYPOSTS}";
+
+
 }
