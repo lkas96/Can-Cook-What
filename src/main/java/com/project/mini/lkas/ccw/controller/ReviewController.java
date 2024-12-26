@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
@@ -103,6 +104,33 @@ public class ReviewController {
 
         return "allReviewListing";
 
+    }
+
+    @GetMapping("/delete/{post-id}")
+    public String postMethodName(@PathVariable("post-id") String postId, RedirectAttributes redirect, HttpSession session) {
+
+        String currentUser = (String) session.getAttribute("loggedInUser");
+
+        Boolean successful = rs.deleteReview(postId, currentUser);
+
+        if (successful == false) {
+
+            String message = "Review deletion failed!";
+
+            redirect.addFlashAttribute("message2", message);
+
+            return "redirect:/review/myreviews";
+
+        } else {
+
+            String message = "Review deleted successfully!";
+
+            redirect.addFlashAttribute("message", message);
+    
+            return "redirect:/review/myreviews";
+        }
+
+        
     }
 
 }
