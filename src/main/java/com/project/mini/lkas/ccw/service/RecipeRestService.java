@@ -12,7 +12,6 @@ import org.springframework.web.client.RestTemplate;
 import com.project.mini.lkas.ccw.constant.RedisKeys;
 import com.project.mini.lkas.ccw.constant.Url;
 import com.project.mini.lkas.ccw.model.Listing;
-import com.project.mini.lkas.ccw.model.Review;
 import com.project.mini.lkas.ccw.repository.MapRepo;
 
 import jakarta.json.Json;
