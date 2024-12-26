@@ -18,6 +18,7 @@ public class Review {
 
     // part 4
     private String bloggerUrl;
+    private String publishedOn;
 
     public String getName() {
         return name;
@@ -43,11 +44,11 @@ public class Review {
     //     this.postedDate = postedDate;
     // }
 
-    public String getidMeal() {
+    public String getIdMeal() {
         return idMeal;
     }
 
-    public void setidMeal(String idMeal) {
+    public void setIdMeal(String idMeal) {
         this.idMeal = idMeal;
     }
 
@@ -91,11 +92,18 @@ public class Review {
         this.bloggerUrl = bloggerUrl;
     }
 
+    public String getPublishedOn() {
+        return publishedOn;
+    }
+
+    public void setPublishedOn(String publishedOn) {
+        this.publishedOn = publishedOn;
+    }
+
     public Review(String name, String email, String idMeal, String mealTitle, String mealPicture,
             String reviewTitle, String reviewMessage) {
         this.name = name;
         this.email = email;
-        // this.postedDate = postedDate;
         this.idMeal = idMeal;
         this.mealTitle = mealTitle;
         this.mealPicture = mealPicture;
@@ -108,9 +116,11 @@ public class Review {
 
     @Override
     public String toString() {
-        return "Review [name=" + name + ", email=" + email + ", idMeal=" + idMeal
-                + ", mealTitle=" + mealTitle + ", mealPicture=" + mealPicture + ", reviewTitle=" + reviewTitle
-                + ", reviewMessage=" + reviewMessage + ", bloggerUrl=" + bloggerUrl + "]";
+        return "Review [name=" + name + ", email=" + email + ", idMeal=" + idMeal + ", mealTitle=" + mealTitle
+                + ", mealPicture=" + mealPicture + ", reviewTitle=" + reviewTitle + ", reviewMessage=" + reviewMessage
+                + ", bloggerUrl=" + bloggerUrl + ", publishedOn=" + publishedOn + "]";
     }
+
+
     
 }
