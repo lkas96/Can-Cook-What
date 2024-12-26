@@ -24,6 +24,7 @@ import com.project.mini.lkas.ccw.repository.MapRepo;
 
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonNumber;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
@@ -372,5 +373,57 @@ public class ReviewService {
             return retrieved;
         }
     }
+
+    public Boolean deleteReview(String postId, String currentUser) {
+
+        String newAuth = refreshAuthCode();
+
+        String appendedUrl = Url.deletePost.replace("{BLOGID}", blogId).replace("{POSTID}", postId);
+
+        RequestEntity<Void> request = RequestEntity
+                .delete(appendedUrl)
+                .header("Authorization", "Bearer " + newAuth)
+                .build();
+
+        ResponseEntity<Void> resp = restTemplate.exchange(request, Void.class);
+        if (resp.getStatusCode().is2xxSuccessful()) {
+
+            //Delete from server success
+            //now delete from redis duh
+
+            String existingReviews = mp.get(RedisKeys.ccwReviews, currentUser);
+
+            JsonReader jr = Json.createReader(new StringReader(existingReviews));
+            JsonObject existingReviewRecords = jr.readObject();
+            JsonArray existingReviewArray = existingReviewRecords.getJsonArray("reviews");
+
+            JsonArrayBuilder updatedArrayBuilder = Json.createArrayBuilder();
+
+            //loops through the array of reviews
+            //finds matching postid then skip adding to new array
+            //since not like list cannot remove like that, do the opposite
+            for (JsonValue value : existingReviewArray) {
+                JsonObject aReview = (JsonObject) value;
+                if (!aReview.getString("postId").equals(postId)) {
+                    updatedArrayBuilder.add(aReview);
+                }
+            }
+
+            // rebuild the new json object now
+            JsonObject updatedRecords = Json.createObjectBuilder(existingReviewRecords)
+                    .add("reviews", updatedArrayBuilder)
+                    .build();
+
+            mp.update(RedisKeys.ccwReviews, currentUser, updatedRecords.toString());
+
+
+            return true;
+
+        } else {
+            
+            return false;
+        }
+    }
+
 
 }
