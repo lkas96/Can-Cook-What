@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reviews")
 public class ReviewRestController {
 
     @Autowired
     private ReviewRestService rrs;
     
-    @GetMapping("/allReviews")
+    @GetMapping("/all")
     public ResponseEntity<List<Post>> getAllReviews() {
         List<Post> reviews = rrs.getAllReviews();
         
