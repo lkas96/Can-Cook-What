@@ -180,8 +180,6 @@ public class RecipeService {
         JsonObject savedRecords = jr.readObject();
         JsonArray savedArray = savedRecords.getJsonArray("recipe_id");
 
-        System.out.println("Saved Array: " + savedArray);
-
         JsonArrayBuilder updatedArray = Json.createArrayBuilder();
 
         //Add the ID that dont matches into updated array then replace it after
