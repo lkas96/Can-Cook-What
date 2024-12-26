@@ -18,25 +18,28 @@ public class Url {
     // www.themealdb.com/api/json/v1/1/random.php
     public static final String randomOne = "https://www.themealdb.com/api/json/v2/{APIKEY}/random.php";
 
-    //Get 10 rfandom recipes
+    // Get 10 rfandom recipes
     // www.themealdb.com/api/json/v1/1/randomselection.php
     public static final String randomTen = "https://www.themealdb.com/api/json/v2/{APIKEY}/randomselection.php";
 
-    //Search reicpe - user input search string whatever
+    // Search reicpe - user input search string whatever
     // www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
     public static final String searchRecipe = "https://www.themealdb.com/api/json/v2/{APIKEY}/search.php?s={SEARCHSTRING}";
 
-    //BLOGGER POST URL
-    //www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
+    // BLOGGER POST URL
+    // www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
     public static final String postToBlogger = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/";
 
-    //BLOGGER REFERSH OAUTH2 TOKEN
-    //https://oauth2.googleapis.com/token?
+    // BLOGGER REFERSH OAUTH2 TOKEN
+    // https://oauth2.googleapis.com/token?
     public static final String refreshAuthCode = "https://oauth2.googleapis.com/token";
 
-    //GET ALL BLOGGER POSTS
-    //     https://www.googleapis.com/blogger/v3/blogs/blogid/posts?key=APIKEY&maxResults=ANYNUMBER
+    // GET ALL BLOGGER POSTS
+    // https://www.googleapis.com/blogger/v3/blogs/blogid/posts?key=APIKEY&maxResults=ANYNUMBER
     public static final String getAllPosts = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts?key={APIKEY}&maxResults={HOWMANYPOSTS}";
 
+    //Blogger delete a post
+    // https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
+    public static final String deletePost = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/{POSTID}";
 
 }
