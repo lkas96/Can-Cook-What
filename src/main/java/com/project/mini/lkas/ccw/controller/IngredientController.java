@@ -25,10 +25,7 @@ public class IngredientController {
         List<Ingredient> ingredients = is.getAllIngredients();
 
         model.addAttribute("ingredients", ingredients);
-
-        System.out.println("ArraySize" + ingredients.size());
-        // System.out.println("Ingredients: " + ingredients);
-
+        
         return "ingredientListing";
     }
     
