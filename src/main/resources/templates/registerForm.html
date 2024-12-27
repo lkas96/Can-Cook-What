@@ -41,7 +41,7 @@
             <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
         <div th:if="${emailUsed}" class="alert alert-danger">
-          <p th:text="${emailUsed}"></p>
+          <span th:text="${emailUsed}"></span>
       </div>
 
         <div class="mb-3">

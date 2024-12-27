@@ -120,17 +120,17 @@
 
     <div class="container">
       <br>
-      <h1>Community Reviews</h1>
-      <br>
-
       <div th:if="${message}" class="alert alert-success">
         <span th:text="${message}"></span>
       </div>
 
       <div th:if="${message2}" class="alert alert-danger">
-        <p th:text="${message2}"></p>
-        <br>
+        <span th:text="${message2}"></span>
       </div>
+
+      <br>
+      <h1>Community Reviews</h1>
+      <br>
 
       <div th:if="${allreviews.size() > 0}">
         <table class="table table-dark table-striped">
@@ -144,7 +144,7 @@
             <tbody>
                 <tr th:each="eachReview : ${allreviews}">
                   <td>
-                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 100%; height: 300px;">
+                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 100%;">
                   </td>
                   <td>
                     <h5 th:text="${eachReview.mealTitle}"></h5><br>
