@@ -129,8 +129,7 @@
 
       <!-- Display message when basket created successfully -->
       <div th:if="${message}" class="alert alert-success">
-        <p th:text="${message}"></p>
-        <!-- <a th:href="@{/login}" class="btn btn-primary">Go to Login</a> -->
+        <span th:text="${message}"></span>
       </div>
 
       <form method="POST" th:action="@{/basket/create}">

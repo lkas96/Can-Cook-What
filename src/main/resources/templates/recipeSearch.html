@@ -128,7 +128,7 @@
 
       <!-- Universal Message -->
       <div th:if="${message}" class="alert alert-success">
-        <p th:text="${message}"></p>
+        <span th:text="${message}"></span>
       </div>
 
       <form method="POST" th:action="@{/recipe/search}">
