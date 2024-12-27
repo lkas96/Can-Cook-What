@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.mini.lkas.ccw.constant.RedisKeys;
 import com.project.mini.lkas.ccw.model.Basket;
+import com.project.mini.lkas.ccw.model.Ingredient;
 import com.project.mini.lkas.ccw.repository.MapRepo;
 
 import jakarta.json.Json;
@@ -21,6 +22,9 @@ public class BasketService {
 
     @Autowired
     private MapRepo mp;
+
+    @Autowired
+    private IngredientService is;
 
     public void createBasket(String user, Basket basket) {
 
@@ -172,5 +176,32 @@ public class BasketService {
 
         mp.update(RedisKeys.ccwContainers, user, update.toString());
     }
+
+    public List<String> validateIngredients(List<String> ingredientList) {
+
+        //for sending back to the user
+        List<String> invalidIngredients = new ArrayList<>();
+
+        //Call ingredient service to get all the ingredients from db
+        List<Ingredient> allIngredients = is.getAllIngredients();
+        
+        List<String> databaseList = new ArrayList<>();
+
+        // cnvert the list of ingredients into a list of strings
+        for (Ingredient i : allIngredients) {
+            databaseList.add(i.getName());
+        }
+
+        //now loop check ugh 
+        //user list vs database list
+        for (String ingredient : ingredientList) {
+            if (!databaseList.contains(ingredient)) {
+                invalidIngredients.add(ingredient);
+            }
+        }
+
+        return invalidIngredients;
+        
+    }   
 
 }

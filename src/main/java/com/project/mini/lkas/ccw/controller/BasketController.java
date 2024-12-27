@@ -53,9 +53,21 @@ public class BasketController {
 
     @PostMapping("/create")
     public String addBasket(@RequestParam String name, @RequestParam String ingredients, Model model,
-            HttpSession session) {
+            HttpSession session, RedirectAttributes redirect) {
 
         List<String> ingredientList = Arrays.asList(ingredients.split(","));
+
+        //custom validation to see if the ingredients list matches whatever mealdb api has
+        //if not, return an error message with whatever that ingredient is
+                
+        List<String> invalidIngredient = bs.validateIngredients(ingredientList);
+
+        //if invalid contains something, return the error message
+        if (invalidIngredient.size() > 0) {
+            redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
+            
+            return "redirect:/basket/create";
+        }
 
         Basket b = new Basket(name, ingredientList);
 

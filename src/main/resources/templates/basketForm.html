@@ -148,17 +148,11 @@
         </div>
 
         <div class="mb-3">
-          <label for="ingredients" class="form-label"
-            >Ingredients (Separate with Commas)</label
-          >
-          <input
-            type="text"
-            class="form-control"
-            th:name="ingredients"
-            th:value="${ingredients}"
-            placeholder="Ingredient 1, Ingredient 2, Ingredient 3"
-            required
-          />
+          <label for="ingredients" class="form-label">Ingredients (Separate with Commas)</label>
+          <input type="text" class="form-control" th:name="ingredients" th:value="${ingredients}" placeholder="Ingredient 1, Ingredient 2, Ingredient 3" required/>
+          <div th:if="${invalidIngredient}" class="alert alert-danger">
+            <span th:text="${invalidIngredient}"></span>
+          </div>
         </div>
 
         <br />
