@@ -120,9 +120,6 @@
 
     <div class="container">
       <br>
-      <h1>Your Reviews</h1>
-      <br>
-
       <div th:if="${message}" class="alert alert-success">
         <span th:text="${message}"></span>
       </div>
@@ -131,6 +128,9 @@
         <span th:text="${message2}"></p>
         <br>
       </div>
+
+      <h1>My Reviews</h1>
+      <br>
 
       <div th:if="${reviews.size() > 0}">
         <table class="table table-dark table-striped">
@@ -169,6 +169,11 @@
     <div th:if="${reviews.size() == 0}">
         <p>You have not left any reviews. You can check out the community reviews or whip something up too.</p>
     </div>
+
+    <br><br><br><br><br>
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary" style="position: fixed; bottom: 15px; right: 15px;">
+      <img src="/images/chevrons-up.svg" alt="Back to Top" style="color: white;"/>
+    </button>
     
     </div>
   </body>
