@@ -18,7 +18,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">CanCookWhat</a>
+        <a class="navbar-brand" th:href="@{/home}">CanCookWhat</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -32,15 +32,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- Item 1-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
-            </li>
   
             <!-- Item 2-->
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link dropdown-toggle "
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -50,12 +46,10 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket}">View Baskets</a>
+                  <a class="dropdown-item" th:href="@{/basket}">My Baskets</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket/create}"
-                    >Create a Basket</a
-                  >
+                  <a class="dropdown-item" th:href="@{/basket/create}">Create a Basket</a>
                 </li>
               </ul>
             </li>
@@ -73,13 +67,13 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
+                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
+                </li>
+                <li>
                   <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/search}">Search for a Recipe</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/randomOne}">1 Random Recipe</a>
@@ -103,13 +97,17 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
                 </li>
                 </li>
               </ul>
+            </li>
+            <!-- Item 5-->
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" th:href="@{/ingredients}">Ingredient Database</a>
             </li>
             
           </ul>
@@ -126,19 +124,21 @@
       <div th:if="${message}" class="alert alert-success">
         <span th:text="${message}"></span>
       </div>
+      <div th:if="${fail}" class="alert alert-danger">
+        <span th:text="${fail}"></span>
+      </div>
       <h1 th:utext="${universalTitle}"></h1>
       <br>
         <a class="btn btn-primary" th:href="@{/basket/create}">Create New Basket</a>
       <br><br><br>
 
-    <div class="container">
       <div th:if="${baskets.size() > 0}">
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Basket Name</th>
+                    <th style="width:25%">Basket Name</th>
                     <th>Ingredients</th>
-                    <th>Actions</th>
+                    <th style="width:15%">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -150,19 +150,25 @@
                                 <td th:utext="${ingredient}"></td>
                             </tr>
                         </table>
+                        <br>
                     </td>
                     <td>
-                        <a class="btn btn-success" th:href="@{/recipe/find/{basket-id}(basket-id=${eachBasket.id})}">Find a recipe</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        <!-- <a class="btn btn-warning" th:href="@{/basket/manage/{basket-name}(basket-name=${eachBasket.name})}">Manage Basket</a><br><br> -->
-                        <a class="btn btn-danger" th:href="@{/basket/delete/{basket-name}(basket-name=${eachBasket.name})}">Delete Basket</a>
+                      <a class="btn btn-success w-100" th:href="@{/recipe/find/{basket-id}(basket-id=${eachBasket.id})}">Find Recipe</a>
+                      <br><br>
+                      <a class="btn btn-danger w-100" th:href="@{/basket/delete/{basket-name}(basket-name=${eachBasket.name})}">Delete Basket</a>
+                      <br><br><br><br><br>
                     </td>
                 </tr>
             </tbody>
         </table>
-    </div>
     <div th:if="${baskets.size() == 0}">
         <p>No baskets and ingredients found.</p>
     </div>
+
+    <br><br><br><br><br>
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary" style="position: fixed; bottom: 15px; right: 15px;">
+      <img src="/images/chevrons-up.svg" alt="Back to Top" style="color: white;"/>
+    </button>
     
     </div>
   </body>

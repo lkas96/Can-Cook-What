@@ -18,7 +18,7 @@
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">CanCookWhat</a>
+        <a class="navbar-brand" th:href="@{/home}">CanCookWhat</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -32,10 +32,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <!-- Item 1-->
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
-            </li>
   
             <!-- Item 2-->
             <li class="nav-item dropdown">
@@ -50,12 +46,10 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket}">View Baskets</a>
+                  <a class="dropdown-item" th:href="@{/basket}">My Baskets</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" th:href="@{/basket/create}"
-                    >Create a Basket</a
-                  >
+                  <a class="dropdown-item" th:href="@{/basket/create}">Create a Basket</a>
                 </li>
               </ul>
             </li>
@@ -63,7 +57,7 @@
             <!-- Item 3-->
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link dropdown-toggle "
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -73,13 +67,13 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
+                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
+                </li>
+                <li>
                   <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/search}">Search for a Recipe</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/randomOne}">1 Random Recipe</a>
@@ -103,13 +97,17 @@
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
                 </li>
                 </li>
               </ul>
+            </li>
+            <!-- Item 5-->
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" th:href="@{/ingredients}">Ingredient Database</a>
             </li>
             
           </ul>
@@ -126,26 +124,28 @@
       <h1 th:utext="${universalTitle}"></h1>
       <br>
 
-      <!-- Dispaly basket delete message
-      <div th:if="${message}" class="alert alert-success">
-        <span th:text="${message}"></span>
-      </div> -->
-
       <div th:if="${listings.size() > 0}">
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Image</th>
-                    <th>Dish Name</th>
+                  <th style="width:25%">Image</th>
+                  <th>Dish Name</th>
+                  <th style="width:15%">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="eachListing, rows: ${listings}">
-                  <td><img th:src="${eachListing.strMealThumb}" alt="Recipe Image" style="width: 300px; height: 300px;"/></td>
-                    <td>
-                      <span th:utext="${eachListing.strMeal}"></span><br><br>
-                      <a class="btn btn-success" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View Recipe</a>
-                    </td>
+                  <td><img th:src="${eachListing.strMealThumb}" alt="Recipe Image" style="width: 100%;"/></td>
+                  <td>
+                    <h5 th:utext="${eachListing.strMeal}"></h5>
+                    <br>
+                    Recipe ID: <span th:utext="${eachListing.idMeal}"></span>
+                  </td>
+                  <td>
+                    <a class="btn btn-primary w-100" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View Recipe</a>
+                    <br><br>
+                    <a class="btn btn-success w-100" th:href="@{/recipe/save/{recipe-id}(recipe-id=${eachListing.idMeal})}">Quick Save</a>
+                  </td>
                 </tr>
             </tbody>
         </table>
@@ -153,6 +153,11 @@
     <div th:if="${listings.size() == 0}">
         <p th:utext="${universalMessage}"></p>
     </div>
+
+    <br><br><br><br><br>
+    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary" style="position: fixed; bottom: 15px; right: 15px;">
+      <img src="/images/chevrons-up.svg" alt="Back to Top" style="color: white;"/>
+    </button>
     
     </div>
   </body>
