@@ -122,14 +122,9 @@
     </nav>
 
     <div class="container">
-      <br />
+      <br>
       <h1>Create a new ingredient basket!</h1>
-      <br />
-
-      <!-- Display message when basket created successfully -->
-      <div th:if="${message}" class="alert alert-success">
-        <span th:text="${message}"></span>
-      </div>
+      <br>
 
       <form method="POST" th:action="@{/basket/create}">
 
