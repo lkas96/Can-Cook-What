@@ -122,7 +122,15 @@ public class BasketService {
 
             List<Basket> baskets = new ArrayList<>();
 
-            for (int i = 0; i < basketArray.size(); i++) {
+            System.out.println("Basket Array Size: " + basketArray.size());
+
+
+            //LOOP THROUGH FROM THE LAST INDEX
+            //SO THE LATEST ONE WILL APPEAR ON TOP
+            //ON THE BASKET LISTING PAGE YAAAAAS
+            //EASIER THAN ADDED INFRONT FO THE WHATEVER REDIS MAP ARRAY
+            //too dumb cant figure it out
+            for (int i = basketArray.size()-1 ; i >= 0; i--) {
 
                 JsonObject aBasket = basketArray.getJsonObject(i);
 
