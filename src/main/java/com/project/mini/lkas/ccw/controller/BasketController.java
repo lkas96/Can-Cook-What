@@ -61,11 +61,6 @@ public class BasketController {
 
         String currentUser = (String) session.getAttribute("loggedInUser");
 
-        // System.out.println("PRINTING USERE--------------------");
-        // System.out.println(currentUser);
-        // System.out.println(b.toString());
-        System.out.println(b.getId());
-
         bs.createBasket(currentUser, b);
 
         return "redirect:/basket";
