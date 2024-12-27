@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.project.mini.lkas.ccw.constant.Url;
+import com.project.mini.lkas.ccw.model.Ingredient;
 import com.project.mini.lkas.ccw.model.Post;
+
 import jakarta.json.Json;
 import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
@@ -49,6 +51,30 @@ public class ReviewRestService {
         }
 
         return blogPosts;
+
+    }
+
+    public List<Ingredient> getAllIngredients() {
+       
+        String appendUrl = Url.getAllIngredients.replace("{APIKEY}",apiKey);
+
+        String ingredients = restTemplate.getForObject(appendUrl, String.class);
+
+        JsonReader jr = Json.createReader(new StringReader(ingredients));
+        JsonObject jo = jr.readObject();
+
+        JsonArray ingredientsArray = jo.getJsonArray("meals");
+
+        List<Ingredient> ingredientList = new ArrayList<>();
+
+        //for loop to iterate through the postsArray
+        for (int i = 0; i < ingredientsArray.size(); i++) {
+            JsonObject anIngredient = ingredientsArray.getJsonObject(i);
+            Ingredient ing = new Ingredient(anIngredient.getString("idIngredient"), anIngredient.getString("strIngredient"));
+            ingredientList.add(ing);
+        }
+
+        return ingredientList;
 
     }
 
