@@ -48,6 +48,10 @@ public class BasketService {
             // Because it is a List string, for loop through and add one by one.
             JsonArrayBuilder ingredArrayBuilder = Json.createArrayBuilder();
             for (String ingredient : basket.getIngredients()) {
+                // capitalize the first letter
+                ingredient = ingredient.toLowerCase().trim();
+                ingredient = ingredient.substring(0, 1).toUpperCase() + ingredient.substring(1);
+
                 ingredArrayBuilder.add(ingredient);
             }
             JsonArray ingredArray = ingredArrayBuilder.build();
@@ -79,6 +83,11 @@ public class BasketService {
             // Because it is a List string, for loop through and add one by one.
             JsonArrayBuilder ingredArrayBuilder = Json.createArrayBuilder();
             for (String ingredient : basket.getIngredients()) {
+                
+                // capitalize the first letter
+                ingredient = ingredient.toLowerCase().trim();
+                ingredient = ingredient.substring(0, 1).toUpperCase() + ingredient.substring(1);
+                
                 ingredArrayBuilder.add(ingredient);
             }
             JsonArray ingredArray = ingredArrayBuilder.build();
@@ -203,7 +212,5 @@ public class BasketService {
         }
 
         return invalidIngredients;
-        
-    }   
-
-}
+    }
+}  

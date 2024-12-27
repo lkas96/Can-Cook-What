@@ -55,7 +55,9 @@ public class BasketController {
     public String addBasket(@RequestParam String name, @RequestParam String ingredients, Model model,
             HttpSession session, RedirectAttributes redirect) {
 
+        //primary processing
         List<String> ingredientList = Arrays.asList(ingredients.split(","));
+        
 
         //custom validation to see if the ingredients list matches whatever mealdb api has
         //if not, return an error message with whatever that ingredient is
@@ -75,7 +77,7 @@ public class BasketController {
 
         bs.createBasket(currentUser, b);
 
-        redirect.addFlashAttribute("message", "Basket has been created successfully.");
+        redirect.addFlashAttribute("message", "Basket (" + name + ") has been created successfully.");
 
         return "redirect:/basket";
     }
