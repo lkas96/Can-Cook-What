@@ -138,9 +138,9 @@
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th>Dish</th>
+                    <th width="25%">Dish</th>
                     <th>Review</th>
-                    <th>Actions</th>
+                    <th width="15%">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -157,9 +157,9 @@
                     <span th:text="${eachReview.helperDate}"></span>
                   </td>
                   <td>
-                    <a class="btn btn-warning" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
+                    <a class="btn btn-primary w-100" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
                     <br><br>
-                    <a class="btn btn-success" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View The Recipe</a>
+                    <a class="btn btn-success w-100" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View The Recipe</a>
                   </td>
                 </tr>
             </tbody>
