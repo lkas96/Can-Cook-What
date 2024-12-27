@@ -60,6 +60,7 @@ public class RecipeController {
         }
 
         model.addAttribute("listings", results);
+        model.addAttribute("universalTitle", "Matching Recipes Found");
 
         return "recipeListing";
     }
