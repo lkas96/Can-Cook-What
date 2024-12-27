@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.mini.lkas.ccw.model.Ingredient;
 import com.project.mini.lkas.ccw.model.Post;
-import com.project.mini.lkas.ccw.service.ReviewRestService;
-
+import com.project.mini.lkas.ccw.service.ApiRestService;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/all")
-public class ReviewRestController {
+public class ApiRestController {
 
     @Autowired
-    private ReviewRestService rrs;
+    private ApiRestService ars;
     
     @GetMapping("/reviews")
     public ResponseEntity<List<Post>> getAllReviews() {
 
-        List<Post> reviews = rrs.getAllReviews();
+        List<Post> reviews = ars.getAllReviews();
         
         return ResponseEntity.ok().body(reviews);
     }
@@ -34,7 +33,7 @@ public class ReviewRestController {
     @GetMapping("/ingredients")
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
 
-        List<Ingredient> ingredients = rrs.getAllIngredients();
+        List<Ingredient> ingredients = ars.getAllIngredients();
         
         return ResponseEntity.ok().body(ingredients);
 

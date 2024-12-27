@@ -18,7 +18,7 @@ import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 
 @Service
-public class ReviewRestService {
+public class ApiRestService {
 
         RestTemplate restTemplate = new RestTemplate();
 
