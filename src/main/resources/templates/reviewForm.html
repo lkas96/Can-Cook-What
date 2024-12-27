@@ -123,10 +123,6 @@
 
     <div class="container">
       <br>
-      <h1>CanCookWhat Community Reviews</h1>
-      <h5>Share your thoughts and experience on this recipe!</h5>
-      <br><br>
-
       <div th:if="${message}" class="alert alert-success">
         <span th:text="${message}"></span>
       </div>
@@ -135,8 +131,8 @@
         <p th:text="${message2}"></p>
       </div>
 
-      <h2 th:text="${recipe.strMeal}"></h2>
-      <img th:src="${recipe.strMealThumb}" alt="Recipe Image" style="width: 500px; height: 500px;"/>
+      <h2>Reviewing <span th:text="${recipe.strMeal}"></span></h2>
+      <img th:src="${recipe.strMealThumb}" alt="Recipe Image" style="width: 100%; height: auto; max-width: 600px; display: inline-block;"/>
       <br><br><br>
 
       <form method="POST" th:action="@{/review/new}" th:object="${review}">
