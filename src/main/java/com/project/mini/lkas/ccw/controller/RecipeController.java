@@ -101,7 +101,7 @@ public class RecipeController {
         String message = "Recipe has been saved successfully.";
         redirect.addFlashAttribute("message", message);
 
-        String title = "Your Saved Recipes";
+        String title = "My Saved Recipes";
         redirect.addFlashAttribute("univeralMessage", title);
 
         return "redirect:/recipe/view/" + recipeId;

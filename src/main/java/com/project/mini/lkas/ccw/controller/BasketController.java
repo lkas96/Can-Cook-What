@@ -35,7 +35,7 @@ public class BasketController {
 
         model.addAttribute("baskets", baskets);
 
-        String title = "Your Baskets";
+        String title = "My Baskets";
         model.addAttribute("universalTitle", title);
 
         return "basketListing";
