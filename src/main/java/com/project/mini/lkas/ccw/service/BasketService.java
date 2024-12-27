@@ -189,13 +189,15 @@ public class BasketService {
 
         // cnvert the list of ingredients into a list of strings
         for (Ingredient i : allIngredients) {
-            databaseList.add(i.getName());
+            databaseList.add(i.getName().toLowerCase().trim());
         }
 
         //now loop check ugh 
         //user list vs database list
+        // REMMEBER TO COMPARE IN LOWERCASE
+        // TRIM WHITE SPACE ALSO
         for (String ingredient : ingredientList) {
-            if (!databaseList.contains(ingredient)) {
+            if (!databaseList.contains(ingredient.toLowerCase().trim())) {
                 invalidIngredients.add(ingredient);
             }
         }

@@ -65,7 +65,7 @@ public class BasketController {
         //if invalid contains something, return the error message
         if (invalidIngredient.size() > 0) {
             redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
-            
+
             return "redirect:/basket/create";
         }
 
@@ -74,6 +74,8 @@ public class BasketController {
         String currentUser = (String) session.getAttribute("loggedInUser");
 
         bs.createBasket(currentUser, b);
+
+        redirect.addFlashAttribute("message", "Basket has been created successfully.");
 
         return "redirect:/basket";
     }
@@ -85,7 +87,7 @@ public class BasketController {
 
         bs.deleteBasket(user, basketName);
 
-        String message = "Basket Item : " + basketName + " has been deleted.";
+        String message = "Basket (" + basketName + ") has been deleted.";
 
         redirect.addFlashAttribute("message", message);
 
