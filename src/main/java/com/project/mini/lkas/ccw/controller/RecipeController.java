@@ -177,6 +177,14 @@ public class RecipeController {
     @PostMapping("/search")
     public String searchRecipe(@RequestParam String search, Model model) {
         List<Listing> listings = lrs.searchRecipe(search);
+
+        if (listings.isEmpty()) {
+            String message = "No recipes found. Please try another search term for the dish name or make sure the recipe ID you are looking up is 5 digits long.";
+            model.addAttribute("fail", message);
+
+            return "recipeSearch";
+        }
+
         model.addAttribute("listings", listings);
 
         String title = "Matching Recipes Found";

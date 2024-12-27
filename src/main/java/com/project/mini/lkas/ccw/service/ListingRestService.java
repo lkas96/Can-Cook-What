@@ -79,7 +79,8 @@ public class ListingRestService {
 
         // Take recipe ID, then call the API get details of the recipe
 
-        // System.out.println("IN REST SERVICE NOW ------------------------------------------");
+        // System.out.println("IN REST SERVICE NOW
+        // ------------------------------------------");
         String appendUrl1 = Url.searchByMealId.replace("{APIKEY}", LAWSONKEY);
         String appendUrl2 = appendUrl1.replace("{MEALID}", recipeId);
 
@@ -260,48 +261,92 @@ public class ListingRestService {
     }
 
     public List<Listing> searchRecipe(String searchString) {
-        
-        //Call the mealdb api add the searchquery to the url
-        //return the list of recipes
-        //bam done
 
-        List<Listing> results = new ArrayList<>();
+        // FIRST PROCESS, NOW ADDING SEARCH BY NAME AND ALSO MEAL ID
 
-        String appendUrl1 = Url.searchRecipe.replace("{APIKEY}", LAWSONKEY);
-        String appendUrl2 = appendUrl1.replace("{SEARCHSTRING}", searchString);
+        // Take the search string see if text or numbers
+        if (searchString.matches(".*\\d.*")) {
+            // If numbers, search by meal id
 
-        String jsonData = restTemplate.getForObject(appendUrl2, String.class);
+            List<Listing> results = new ArrayList<>();
 
-        JsonReader jr = Json.createReader(new StringReader(jsonData));
-        JsonObject jo = jr.readObject();
-        
-        //Similar to search by ingredients however this returns thewholl recipe details and not a list of recipes title/images
-        //msut check properly, take out only listing variables from recipe json dump
+            String appendUrl1 = Url.searchByMealId.replace("{APIKEY}", LAWSONKEY);
+            String appendUrl2 = appendUrl1.replace("{MEALID}", searchString);
 
-        if (jo.isNull("meals")) {
-            
-            return results; //return empty array
+            String jsonData = restTemplate.getForObject(appendUrl2, String.class);
+
+            JsonReader jr = Json.createReader(new StringReader(jsonData));
+            JsonObject jo = jr.readObject();
+
+            if (jo.isNull("meals")) {
+
+                return results; // return empty array
+
+            } else {
+                JsonArray meals = jo.getJsonArray("meals");
+
+                for (int i = 0; i < meals.size(); i++) {
+
+                    JsonObject meal = meals.getJsonObject(i);
+
+                    Listing list = new Listing();
+                    list.setStrMeal(meal.getString("strMeal"));
+                    list.setStrMealThumb(meal.getString("strMealThumb"));
+                    list.setIdMeal(meal.getString("idMeal"));
+
+                    results.add(list);
+                }
+
+                return results;
+            }
 
         } else {
-            JsonArray meals = jo.getJsonArray("meals");
 
-            for (int i = 0; i < meals.size(); i++) {
+            //does not match the numbers so search by name
 
-                JsonObject meal = meals.getJsonObject(i);
-    
-                Listing list = new Listing();
-                list.setStrMeal(meal.getString("strMeal"));
-                list.setStrMealThumb(meal.getString("strMealThumb"));
-                list.setIdMeal(meal.getString("idMeal"));
-    
-                results.add(list);
+            // Call the mealdb api add the searchquery to the url
+            // return the list of recipes
+            // bam done
+
+            List<Listing> results = new ArrayList<>();
+
+            String appendUrl1 = Url.searchRecipe.replace("{APIKEY}", LAWSONKEY);
+            String appendUrl2 = appendUrl1.replace("{SEARCHSTRING}", searchString);
+
+            String jsonData = restTemplate.getForObject(appendUrl2, String.class);
+
+            JsonReader jr = Json.createReader(new StringReader(jsonData));
+            JsonObject jo = jr.readObject();
+
+            // Similar to search by ingredients however this returns thewholl recipe details
+            // and not a list of recipes title/images
+            // msut check properly, take out only listing variables from recipe json dump
+
+            if (jo.isNull("meals")) {
+
+                return results; // return empty array
+
+            } else {
+                JsonArray meals = jo.getJsonArray("meals");
+
+                for (int i = 0; i < meals.size(); i++) {
+
+                    JsonObject meal = meals.getJsonObject(i);
+
+                    Listing list = new Listing();
+                    list.setStrMeal(meal.getString("strMeal"));
+                    list.setStrMealThumb(meal.getString("strMealThumb"));
+                    list.setIdMeal(meal.getString("idMeal"));
+
+                    results.add(list);
+                }
+
+                return results;
+
             }
-    
-            return results;
 
         }
 
-        
     }
 
 }

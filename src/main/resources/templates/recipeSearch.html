@@ -120,20 +120,18 @@
     </nav>
 
     <div class="container">
-      <br />
-      <h1>Searching for recipes</h1>
-      <br />
-
-      <!-- Universal Message -->
-      <div th:if="${message}" class="alert alert-success">
-        <span th:text="${message}"></span>
+      <br>
+      <div th:if="${fail}" class="alert alert-danger">
+        <span th:text="${fail}"></span>
       </div>
+      <h1>Search Recipes</h1>
+      <br>
 
       <form method="POST" th:action="@{/recipe/search}">
 
         <div class="mb-3">
           <label for="name" class="form-label">Search</label>
-          <input type="text" class="form-control" th:name="search" th:value="${search}" required/>
+          <input type="text" class="form-control" th:name="search" th:value="${search}" placeholder="Dish name or Recipe ID (12345)" required/>
         </div>
 
         <br>
