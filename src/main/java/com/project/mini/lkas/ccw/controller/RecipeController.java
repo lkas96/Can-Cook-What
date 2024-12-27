@@ -43,18 +43,21 @@ public class RecipeController {
     private BasketService bs;
 
     @GetMapping("/find/{basket-id}")
-    public String getListOfRecipes(@PathVariable("basket-id") String basketId, HttpSession session, Model model) {
-
-        // System.out.println("Current User: " + currentUser);
-        // System.out.println("Basket ID: " + basketId);
+    public String getListOfRecipes(@PathVariable("basket-id") String basketId, HttpSession session, Model model, RedirectAttributes redirect) {
 
         // Retrieve Ingredient converted String
         String currentUser = (String) session.getAttribute("loggedInUser");
         String ingredientSearchString = rs.retrieveIngredientString(currentUser, basketId);
-        System.out.println("Ingredient String: " + ingredientSearchString);
 
         // Call the RECIPE api
         List<Listing> results = lrs.getListOfRecipes(ingredientSearchString);
+
+        if (results.isEmpty()) {
+            String message = "No recipes found with these combination of ingredients. Please try other combinations.";
+            redirect.addFlashAttribute("fail", message);
+
+            return "redirect:/recipe/basket";
+        }
 
         model.addAttribute("listings", results);
 
@@ -175,7 +178,7 @@ public class RecipeController {
         List<Listing> listings = lrs.searchRecipe(search);
         model.addAttribute("listings", listings);
 
-        String title = "Matching Recipes";
+        String title = "Matching Recipes Found";
         model.addAttribute("universalTitle", title);
         
         return "recipeListing";
@@ -191,7 +194,7 @@ public class RecipeController {
 
         model.addAttribute("baskets", baskets);
 
-        String title = "Search for recipe with a basket";
+        String title = "Choose a basket to search for recipes";
         model.addAttribute("universalTitle", title);
 
         return "basketListing";

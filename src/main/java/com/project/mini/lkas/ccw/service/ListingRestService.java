@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -46,14 +49,14 @@ public class ListingRestService {
         System.out.println("ATTEMPING TO GET DATA FROM EXTERNAL API");
         String jsonData = restTemplate.getForObject(appendedUrl2, String.class);
 
-        // ResponseEntity<String> response = restTemplate.exchange(appendedUrl2,
-        // HttpMethod.GET, HttpEntity.EMPTY, String.class);
-        // System.out.println("Headers: " + response.getHeaders());
-
         JsonReader jr = Json.createReader(new StringReader(jsonData));
         JsonObject jo = jr.readObject();
 
         // System.out.println(jo);
+
+        if (jo.isNull("meals")) {
+            return results; // return empty array
+        }
 
         JsonArray meals = jo.getJsonArray("meals");
 
