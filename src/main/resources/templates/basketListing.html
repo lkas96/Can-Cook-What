@@ -127,10 +127,18 @@
       <div th:if="${fail}" class="alert alert-danger">
         <span th:text="${fail}"></span>
       </div>
-      <h1 th:utext="${universalTitle}"></h1>
+      <table width="100%">
+        <tr>
+          <td>
+            <h1 th:utext="${universalTitle}"></h1>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a class="btn btn-primary" th:href="@{/basket/create}">New Basket</a>
+          </td>
+        </tr>
+      </table>
+
       <br>
-        <a class="btn btn-primary" th:href="@{/basket/create}">Create New Basket</a>
-      <br><br><br>
 
       <div th:if="${baskets.size() > 0}">
         <table class="table table-dark table-striped">
