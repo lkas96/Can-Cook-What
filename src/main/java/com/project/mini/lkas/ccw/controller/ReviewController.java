@@ -95,7 +95,7 @@ public class ReviewController {
 
     }
 
-    @GetMapping("/allreviews")
+    @GetMapping("community")
     public String displayAllReviews(Model model, HttpSession session) {
 
         List<Review> reviews = rs.getAllReviews();

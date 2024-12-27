@@ -99,7 +99,7 @@
                   <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
                 </li>
                 <li>
-                  <a class="dropdown-item" th:href="@{/review/allreviews}">Community Reviews</a>
+                  <a class="dropdown-item" th:href="@{/review/community}">Community Reviews</a>
                 </li>
                 </li>
               </ul>
@@ -136,7 +136,7 @@
         <table class="table table-dark table-striped">
             <thead>
                 <tr>
-                    <th width="25%">Dish</th>
+                    <th width="25%">Image</th>
                     <th>Review</th>
                     <th width="15%">Actions</th>
                 </tr>
@@ -159,8 +159,6 @@
                     <a class="btn btn-primary w-100" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
                     <br><br>
                     <a class="btn btn-success w-100" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View The Recipe</a>
-                    <br><br>
-                    <a class="btn btn-danger w-100" th:href="@{/review/delete/{post-id}(post-id=${eachReview.postId})}">Delete Review</a>
                   </td>
                 </tr>
             </tbody>
