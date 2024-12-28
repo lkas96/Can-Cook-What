@@ -30,6 +30,10 @@ public class Url {
     // www.themealdb.com/api/json/v1/1/latest.php
     public static final String latestRecipes = "https://www.themealdb.com/api/json/v2/{APIKEY}/latest.php";
 
+    //ingredient lookup recipe 
+    //www.themealdb.com/api/json/v2/9973533/filter.php?i=water
+    public static final String ingredientLookup = "https://www.themealdb.com/api/json/v2/{APIKEY}/filter.php?i={INGREDIENT}";
+
     // BLOGGER POST URL
     // www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
     public static final String postToBlogger = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/";

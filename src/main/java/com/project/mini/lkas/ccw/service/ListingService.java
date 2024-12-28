@@ -218,4 +218,41 @@ public class ListingService {
         return latestMeals.size();
     }
 
+    public List<Listing> getRecipesByIngredient(String ingredient) {
+        //take the ingredient string
+        //call the mealdb api
+        //return the list of recipes
+
+        List<Listing> recipes = new ArrayList<>();
+
+        String appendedUrl1 = Url.ingredientLookup.replace("{APIKEY}", LAWSONKEY);
+        String appendedUrl2 = appendedUrl1.replace("{INGREDIENT}", ingredient);
+
+        String jsonData = restTemplate.getForObject(appendedUrl2, String.class);
+
+        JsonReader jr = Json.createReader(new StringReader(jsonData));
+        JsonObject jo = jr.readObject();
+
+        if (jo.isNull("meals")) {
+            return recipes; // return empty array
+        }
+
+        JsonArray meals = jo.getJsonArray("meals");
+
+        for (int i = 0; i < meals.size(); i++) {
+
+            JsonObject meal = meals.getJsonObject(i);
+
+            Listing list = new Listing();
+            list.setStrMeal(meal.getString("strMeal"));
+            list.setStrMealThumb(meal.getString("strMealThumb"));
+            list.setIdMeal(meal.getString("idMeal"));
+
+            recipes.add(list);
+        }
+
+        return recipes;
+
+    }
+
 }

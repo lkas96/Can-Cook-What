@@ -124,7 +124,8 @@
     <div class="container">
       <br>
         <div class="alert alert-success">
-          <span>Tip: Use the browser's built-in find feature to look up ingredients</span>
+          <span>Tip: Use the browser's built-in find feature to look up ingredients.</span>
+          <span>Click on an ingredient to show a list of recipes that includes that ingredient. </span>
         </div>
       <table width="100%">
         <thead>
@@ -138,11 +139,11 @@
         <td th:each="i : ${#numbers.sequence(0, 3)}" width="25%">
         <div th:if="${rows.index + i < ingredients.size()}" style="text-align: center; vertical-align: middle;">
           <br>
-          <img th:src="'https://www.themealdb.com/images/ingredients/' + ${ingredients[rows.index + i].name} + '.png'" 
-           alt="Ingredient Image" 
-           style="width:50%" />
-           <br><br>
-          <span th:utext="${ingredients[rows.index + i].name}"></span>
+          <img th:src="'https://www.themealdb.com/images/ingredients/' + ${ingredients[rows.index + i].name} + '.png'" alt="Ingredient Image" style="width:50%" />
+          <br><br>
+          <a th:href="@{'/ingredients/' + ${ingredients[rows.index + i].name}}">
+          <span th:utext="${ingredients[rows.index + i].name}" style="font-weight: bold; color: black;"></span>
+          </a>
           <br><br>
         </div>
         </td>

@@ -306,4 +306,28 @@ public class RecipeController {
         return "recipeListing";
     }
 
+    @GetMapping("/ingredient/quicksave/{recipe-id}")
+    public String ingredientQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+        // retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("ingredientsListing"));
+
+        String message = "Recipe has been saved successfully.";
+        // redirect.addFlashAttribute("message", message);
+        model.addAttribute("message", message);
+
+        String title = session.getAttribute("ingredientTitle").toString();
+        // redirect.addFlashAttribute("universalTitle", title);
+        model.addAttribute("universalTitle", title);
+
+        //helper save button persis
+        model.addAttribute("ingredientSaveButton", true);
+
+        return "recipeListing";
+    }
+
 }
