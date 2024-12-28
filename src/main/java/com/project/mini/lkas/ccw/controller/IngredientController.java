@@ -43,6 +43,10 @@ public class IngredientController {
         
         List<Listing> recipes = ls.getRecipesByIngredient(ingredient);
 
+        if (recipes.isEmpty()) {
+            model.addAttribute("universalMessage", "No recipes found with " + ingredient + ".");
+        }
+
         model.addAttribute("listings", recipes);
 
         String title = "Recipes with " + ingredient;
