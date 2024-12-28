@@ -166,8 +166,11 @@ public class RecipeController {
         //save in session to persist for quicksave function
         session.setAttribute("tenlistings", listings);
 
-        String title = "Here are 10 Random Recipes";
+        String title = "Ten Random Recipes";
         model.addAttribute("universalTitle", title);
+
+        // helper to show the save button
+        model.addAttribute("save", "true");
 
         return "recipeListing";
     }
@@ -229,9 +232,12 @@ public class RecipeController {
         model.addAttribute("message", message);
 
 
-        String title = "10 Random Recipes";
+        String title = "Ten Random Recipes";
         // redirect.addFlashAttribute("universalTitle", title);
         model.addAttribute("universalTitle", title);
+
+        // helper to show the save button
+        model.addAttribute("save", "true");
 
         return "recipeListing";
     }
@@ -242,7 +248,7 @@ public class RecipeController {
 
         model.addAttribute("listings", listings);
 
-        String title = "Latest Recipes Added";
+        String title = "Latest Added Recipes";
         model.addAttribute("universalTitle", title);
 
         return "recipeListing";

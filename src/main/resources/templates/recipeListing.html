@@ -133,7 +133,9 @@
             <h1 th:utext="${universalTitle}"></h1>
           </td>
           <td style="text-align: right; white-space: nowrap;">
-            <a class="btn btn-primary" th:href="@{/recipe/randomTen}">Generate another 10 recipes</a>
+            <div th:if="${universalTitle == 'Ten Random Recipes'}">
+              <a class="btn btn-primary" th:href="@{/recipe/randomTen}">Generate another 10 recipes</a>
+            </div>
           </td>
         </tr>
       </table>
