@@ -55,16 +55,16 @@ public class BasketController {
     public String addBasket(@RequestParam String name, @RequestParam String ingredients, Model model,
             HttpSession session, RedirectAttributes redirect) {
 
-        //primary processing
+        // primary processing
         List<String> ingredientList = Arrays.asList(ingredients.split(","));
-        
 
-        //custom validation to see if the ingredients list matches whatever mealdb api has
-        //if not, return an error message with whatever that ingredient is
-                
+        // custom validation to see if the ingredients list matches whatever mealdb api
+        // has
+        // if not, return an error message with whatever that ingredient is
+
         List<String> invalidIngredient = bs.validateIngredients(ingredientList);
 
-        //if invalid contains something, return the error message
+        // if invalid contains something, return the error message
         if (invalidIngredient.size() > 0) {
             redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
 
@@ -82,14 +82,87 @@ public class BasketController {
         return "redirect:/basket";
     }
 
-    @GetMapping("/delete/{basket-name}")
-    public String postMethodName(@PathVariable("basket-name") String basketName, RedirectAttributes redirect, HttpSession session) {
+    @GetMapping("/delete")
+    public String postMethodName(@RequestParam("basket-name") String basketName, @RequestParam("basket-id") String basketId, RedirectAttributes redirect,
+            HttpSession session) {
 
         String user = (String) session.getAttribute("loggedInUser");
 
-        bs.deleteBasket(user, basketName);
+        bs.deleteBasket(user, basketId);
+
+        System.out.println("Basket ID: " + basketId);
+        System.out.println("Basket Name: " + basketName);
 
         String message = "Basket (" + basketName + ") has been deleted.";
+
+        redirect.addFlashAttribute("message", message);
+
+        return "redirect:/basket";
+    }
+
+    @GetMapping("/edit/{basket-id}")
+    public String updateForm(@PathVariable("basket-id") String basketId, Model model, HttpSession session) {
+
+        String currentUser = (String) session.getAttribute("loggedInUser");
+
+        Basket b = bs.getBasketById(currentUser, basketId);
+
+        // additional processing to remove [] from the ingredients list
+        String ingredients = b.getIngredients().toString();
+        ingredients = ingredients.substring(1, ingredients.length() - 1);
+
+        // since cannot set as basket model must be array
+        // add to attribute for display purposes on form
+        model.addAttribute("ingredients", ingredients);
+
+        model.addAttribute("basket", b);
+
+        //Save to session for edit if got errors
+        session.setAttribute("basket", b);
+        session.setAttribute("ingredients", ingredients);
+
+        return "basketFormEdit";
+    }
+
+    @PostMapping("/edit/{basket-id}")
+    public String editBasket(@RequestParam String id, @RequestParam String name, @RequestParam String ingredients,
+            Model model, HttpSession session, RedirectAttributes redirect) {
+
+        String message = "Basket has been updated successully.";
+
+        //validate inrgedients first
+        // primary processing
+        List<String> ingredientList = Arrays.asList(ingredients.split(","));
+
+        // custom validation to see if the ingredients list matches whatever mealdb api
+        // has
+        // if not, return an error message with whatever that ingredient is
+
+        List<String> invalidIngredient = bs.validateIngredients(ingredientList);
+
+        // if invalid contains something, return the error message
+        if (invalidIngredient.size() > 0) {
+            redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
+
+            //get session   attributes
+            Basket b = (Basket) session.getAttribute("basket");
+            String ing = (String) session.getAttribute("ingredients");
+
+            System.out.println("Basket: " + b);
+            System.out.println("Ingredients: " + ing);
+
+            redirect.addFlashAttribute("basket", (Basket) session.getAttribute("basket"));
+            redirect.addFlashAttribute("ingredients", (String) session.getAttribute("ingredients"));
+
+            return "redirect:/basket/edit/" + id;
+        }
+
+        // if valid, update the basket
+        bs.editBasket(id, name, ingredientList, (String) session.getAttribute("loggedInUser"));
+
+
+
+
 
         redirect.addFlashAttribute("message", message);
 

@@ -3,7 +3,6 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Baskets</title>
 
     <!-- Bootstrap CSS -->
     <link
@@ -14,6 +13,7 @@
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <title>Editing Basket</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -124,70 +124,45 @@
 
     <div class="container">
       <br>
-      <div th:if="${message}" class="alert alert-success">
-        <span th:text="${message}"></span>
-      </div>
-      <div th:if="${fail}" class="alert alert-danger">
-        <span th:text="${fail}"></span>
-      </div>
-      
-      <table width="100%">
-        <tr>
-          <td>
-            <h1 th:utext="${universalTitle}"></h1>
-          </td>
-          <td style="text-align: right; white-space: nowrap;">
-            <a class="btn btn-primary" th:href="@{/basket/create}">New Basket</a>
-          </td>
-        </tr>
-      </table>
-
+      <h1>Editing Basket</h1>
       <br>
 
-      <div th:if="${baskets.size() > 0}">
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th style="width:35%">Basket Name</th>
-                    <th>Ingredients</th>
-                    <th style="width:15%">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="eachBasket, rows: ${baskets}">
-                    <td th:utext="${eachBasket.name}"></td>
-                    <td>
-                        <table>
-                            <tr th:each="ingredient : ${eachBasket.ingredients}">
-                                <td>
-                                  <img th:src="'https://www.themealdb.com/images/ingredients/' + ${ingredient} + '.png'" alt="Ingredient Image" style="width: 50px; height: 50px;" />
-                                  &nbsp;&nbsp;&nbsp;<span th:utext="${ingredient}"><span>
-                                </td>
-                            </tr>
-                        </table>
-                        <br>
-                    </td>
-                    <td>
-                      <a class="btn btn-primary w-100" th:href="@{/recipe/find/{basket-id}(basket-id=${eachBasket.id})}">Find Recipe</a>
-                      <br><br>
-                      <a class="btn btn-success w-100" th:href="@{/basket/edit/{basket-id}(basket-id=${eachBasket.id})}">Edit Basket</a>
-                      <br><br>
-                      <a class="btn btn-danger w-100" th:href="@{/basket/delete(basket-name=${eachBasket.name}, basket-id=${eachBasket.id})}">Delete Basket</a>
-                      <br><br><br><br><br>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div th:if="${baskets.size() == 0}">
-        <p>No baskets found. Create your first ingredient basket!</p>
-    </div>
+      <form method="POST" th:action="@{/basket/edit/{id}(id=${basket.id})}">
 
-    <br><br><br><br><br>
-    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary" style="position: fixed; bottom: 15px; right: 15px;">
-      <img src="/images/chevrons-up.svg" alt="Back to Top" style="color: white;"/>
-    </button>
-    
+        <input type="hidden" th:name="id" th:value="${basket.id}"/>
+
+        <div class="mb-3">
+          <label for="name" class="form-label">Basket Name</label>
+          <input type="text" class="form-control" th:name="name" th:value="${basket.name}" required/>
+        </div>
+
+        <div class="mb-3">
+          <label for="ingredients" class="form-label">Ingredients</label>
+          <input type="text" class="form-control" th:name="ingredients" th:value="${ingredients}" required/>
+          <br>
+          <div th:if="${invalidIngredient}" class="alert alert-danger">
+            <span th:text="'Invalid ingredient(s) : ' + ${invalidIngredient}"></span>
+            <span>Please check your spelling or refer to the ingredient database for the list of accepted/supported ingredients.</span>
+            <br>
+            <a th:href="@{/ingredients}" target="_blank" class="alert-link">Ingredients Database</a>
+          </div>
+
+          <div th:if="!${invalidIngredient}" class="alert alert-success">
+            <span>Remove or add new ingredients to your existing basket. Please maintain the same format.</span>
+            <br>
+            <span>Ingredient 1, Ingredient 2, Ingredient 3, etc...</span>
+            <br>
+            <span>Refer to the ingredients database for the list of recgonised ingredients.</span>
+            <br>
+            <a th:href="@{/ingredients}" class="alert-link">Ingredients Database</a>
+          </div>
+
+        </div>
+
+        <br>
+
+        <button type="submit" class="btn btn-primary">Update!</button>
+      </form>
     </div>
   </body>
 </html>
