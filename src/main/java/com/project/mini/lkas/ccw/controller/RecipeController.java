@@ -166,7 +166,7 @@ public class RecipeController {
         //save in session to persist for quicksave function
         session.setAttribute("tenlistings", listings);
 
-        String title = "10 Random Recipes";
+        String title = "Here are 10 Random Recipes";
         model.addAttribute("universalTitle", title);
 
         return "recipeListing";
