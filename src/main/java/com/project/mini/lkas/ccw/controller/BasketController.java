@@ -142,10 +142,6 @@ public class BasketController {
         if (invalidIngredient.size() > 0) {
             redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
 
-            // get session attributes
-            Basket b = (Basket) session.getAttribute("basket");
-            String ing = (String) session.getAttribute("ingredients");
-
             redirect.addFlashAttribute("basket", (Basket) session.getAttribute("basket"));
             redirect.addFlashAttribute("ingredients", (String) session.getAttribute("ingredients"));
 
