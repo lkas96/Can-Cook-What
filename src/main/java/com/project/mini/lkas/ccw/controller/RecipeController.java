@@ -208,6 +208,23 @@ public class RecipeController {
 
         return "basketListing";
     }
+
+    @GetMapping("/quicksave/{recipe-id}")
+    public String quickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+
+        String message = "Recipe has been saved successfully.";
+        redirect.addFlashAttribute("message", message);
+
+        String title = "My Saved Recipes";
+        redirect.addFlashAttribute("univeralMessage", title);
+
+        return "recipeListing";
+    }
     
     
 
