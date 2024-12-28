@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+
 @Controller
 @RequestMapping("/review")
 public class ReviewController {
@@ -129,8 +130,56 @@ public class ReviewController {
     
             return "redirect:/review/myreviews";
         }
-
-        
     }
+
+    @GetMapping("/update/{post-id}")
+    public String updateForm(@PathVariable("post-id") String postId, Model model, HttpSession session) {
+        // System.out.println("------------------------------------------------------------");
+        // System.out.println("CONTROLLER CALLED");;
+        // System.out.println("POST ID: " + postId);
+
+        String currentUserEmail = (String) session.getAttribute("loggedInUser");
+
+        Review reviewToBeUpdated = rs.getReviewById(postId, currentUserEmail);
+
+        model.addAttribute("review", reviewToBeUpdated);
+
+        return "reviewFormEdit";
+
+    }
+
+    @PostMapping("/update/{post-id}")
+    public String updateReview(@PathVariable("post-id") String postId, @ModelAttribute Review review, HttpSession session, RedirectAttributes redirect) {
+        
+        String currentUser = (String) session.getAttribute("loggedInUser");
+
+        System.out.println("POST ID: " + postId);
+        System.out.println("REVIEW ID: " + review.getPostId());
+        System.out.println("REVIEW TITLE: " + review.getReviewTitle()); //so new title do get passed in, assuming message is too
+
+        // now do the update metod duh
+        Boolean successful1 = rs.updateReview(postId, review, currentUser);
+
+        //now do the put patch in the blogger
+        //then take updated time and put back into redis publishedon.
+        Boolean successful2 = rs.patchToBlogger(review);
+
+        if (successful1 == true && successful2 == true) {
+
+            String message = "Review updated successfully!";
+            redirect.addFlashAttribute("message", message);
+
+            return "redirect:/review/myreviews";
+
+        } else {
+
+            String message = "Review update failed!";
+            redirect.addFlashAttribute("message2", message);
+
+            return "redirect:/review/update/" + postId;
+
+        }
+    }
+    
 
 }

@@ -46,4 +46,11 @@ public class Url {
     // https://www.googleapis.com/blogger/v3/blogs/blogId/posts/postId
     public static final String deletePost = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/{POSTID}";
 
+    //blogger patch to update a post just content body
+    ///www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/3445355871727114160
+    public static final String updatePost = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/{POSTID}?key={APIKEY}";
+
+    //blogger self link - blogger id
+    //www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/3445355871727114160"
+    public static final String selfLink= "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}}/posts/{POSTID}}";
 }

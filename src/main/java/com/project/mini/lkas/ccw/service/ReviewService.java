@@ -60,13 +60,14 @@ public class ReviewService {
         // Create body content first.
         String title = "Review for " + review.getMealTitle();
 
-        String body2 = "Reviewed by : " + review.getName() + "<br><br>";
+        String body2 = "Review By : " + review.getName() + "<br><br>";
         String body3 = "<img src='" + review.getMealPicture() + "'><br><br>";
         String body4 = review.getReviewTitle() + "<br>";
         String body5 = review.getReviewMessage() + "<br><br>";
+        String body6 = "Recipe ID: " + review.getIdMeal() + "<br><br>";
 
         // Concant all bodies
-        String content = body2 + body3 + body4 + body5;
+        String content = body2 + body3 + body4 + body5 + body6;
 
         // Create json object by parts first
         JsonObject bid = Json.createObjectBuilder().add("id", blogId).build();
@@ -111,8 +112,6 @@ public class ReviewService {
 
         String newToken = jo.getString("access_token");
 
-        System.out.println("---------NEWTOKEN IN REFRESH AUTH CODE---------");
-        System.out.println("New token: " + newToken);
         return newToken;
 
     }
@@ -388,8 +387,8 @@ public class ReviewService {
         ResponseEntity<Void> resp = restTemplate.exchange(request, Void.class);
         if (resp.getStatusCode().is2xxSuccessful()) {
 
-            //Delete from server success
-            //now delete from redis duh
+            // Delete from server success
+            // now delete from redis duh
 
             String existingReviews = mp.get(RedisKeys.ccwReviews, currentUser);
 
@@ -399,9 +398,9 @@ public class ReviewService {
 
             JsonArrayBuilder updatedArrayBuilder = Json.createArrayBuilder();
 
-            //loops through the array of reviews
-            //finds matching postid then skip adding to new array
-            //since not like list cannot remove like that, do the opposite
+            // loops through the array of reviews
+            // finds matching postid then skip adding to new array
+            // since not like list cannot remove like that, do the opposite
             for (JsonValue value : existingReviewArray) {
                 JsonObject aReview = (JsonObject) value;
                 if (!aReview.getString("postId").equals(postId)) {
@@ -416,13 +415,255 @@ public class ReviewService {
 
             mp.update(RedisKeys.ccwReviews, currentUser, updatedRecords.toString());
 
-
             return true;
 
         } else {
-            
+
             return false;
         }
+    }
+
+    public Review getReviewById(String postId, String currentUserEmail) {
+
+        // System.out.println("------------------------------------------------------------");
+        // System.out.println("REVIEW CALLED");;
+        // System.out.println("POST ID: " + postId);
+
+        String reviewObject = mp.get(RedisKeys.ccwReviews, currentUserEmail);
+
+        JsonReader jr = Json.createReader(new StringReader(reviewObject));
+        JsonObject jo = jr.readObject();
+        JsonArray reviewArray = jo.getJsonArray("reviews");
+
+        // System.out.println("------------------------------------------------------------");
+        // System.out.println("REVIEW ARRAY : " + reviewArray.toString());
+
+        for (int i = 0; i < reviewArray.size(); i++) {
+
+            JsonObject aReview = reviewArray.getJsonObject(i);
+
+            // Match the post id found
+            if (aReview.getString("postId").equals(postId)) {
+
+                // System.out.println("------------------------------------------------------------");
+                // System.out.println("gotten the review details : " + aReview.toString());
+
+                Review r = new Review();
+                r.setName(aReview.getString("name"));
+                r.setEmail(aReview.getString("email"));
+                r.setIdMeal(aReview.getString("idMeal"));
+                r.setMealTitle(aReview.getString("mealTitle"));
+                r.setMealPicture(aReview.getString("mealPicture"));
+                r.setReviewTitle(aReview.getString("reviewTitle"));
+                r.setReviewMessage(aReview.getString("reviewMessage"));
+                r.setBloggerUrl(aReview.getString("bloggerUrl"));
+
+                JsonValue publishOnEpochValue = aReview.get("publishOnEpoch");
+                long publishOnEpoch = ((JsonNumber) publishOnEpochValue).longValue();
+                r.setPublishOnEpoch(publishOnEpoch);
+
+                r.setPostId(aReview.getString("postId"));
+
+                // Use helper instance variable in model to correct date fix
+                // epoch to whatever format I want sickeningass stupid ass timezones and shit
+                // I am too dumb for this
+                // Convert epoch time to Instant
+                Instant instant = Instant.ofEpochSecond(publishOnEpoch);
+
+                // Convert to Singapore time zone (Asia/Singapore)
+                ZonedDateTime singaporeTime = instant.atZone(ZoneId.of("Asia/Singapore"));
+
+                // Format the date and time in the desired format
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
+                String formattedDate = singaporeTime.format(formatter);
+                r.setHelperDate(formattedDate);
+
+                // System.out.println("------------------------------------------------------------");
+                // System.out.println("gotten the review details : " + r.toString());
+
+                return r;
+
+            }
+        }
+
+        return null; // should not get here, did not include whatever
+        // failsafe catch try pretty confident but bad practice w/e
+    }
+
+    public Boolean updateReview(String postId, Review review, String currentUser) {
+        // update the post in redis first
+        // then update the blogger one omg ew later when go back to controlelr
+        // controller will call the next reviewrestservice to post
+
+        String existingReviews = mp.get(RedisKeys.ccwReviews, currentUser);
+
+        JsonReader jr = Json.createReader(new StringReader(existingReviews));
+        JsonObject existingReviewRecords = jr.readObject();
+        JsonArray existingReviewArray = existingReviewRecords.getJsonArray("reviews");
+
+        JsonArrayBuilder updatedReviewsBuilder = Json.createArrayBuilder();
+
+        // loops through the array of reviews
+        // finds matching postid then update
+        for (int i = 0; i < existingReviewArray.size(); i++) {
+            JsonObject aReview = existingReviewArray.getJsonObject(i);
+
+            if (aReview.getString("postId").equals(postId)) {
+                // update the review
+                // override whatever with the same hashkey
+                JsonObject updatedReview = Json.createObjectBuilder(aReview)
+                        .add("reviewTitle", review.getReviewTitle())
+                        .add("reviewMessage", review.getReviewMessage())
+                        .build();
+
+                updatedReviewsBuilder.add(updatedReview);
+            }
+        }
+
+        // build and update the array finalizwe into redsi //put will auto combine ya da
+        // yada
+        JsonArray updatedArray = updatedReviewsBuilder.build();
+
+        JsonObject updatedRecords = Json.createObjectBuilder(existingReviewRecords)
+                .add("reviews", updatedArray)
+                .build();
+
+        mp.update(RedisKeys.ccwContainers, currentUser, updatedRecords.toString());
+        
+        return true;
+    }
+
+    // Helper method broken down
+    // Used for PATCHToBlogger method
+    public JsonObject createJsonDataPatch(Review review) {
+
+        // {
+        //     "kind": "blogger#post",
+        //     "id": "3445355871727114160",
+        //     "blog": {
+        //      "id": "8070105920543249955"
+        //     },
+        //     "url": "http://brettmorgan-test2.blogspot.com/2012/05/new-post_20.html",
+        //     "selfLink": "https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/3445355871727114160",
+        //     "title": "An updated post",
+        //     "content": "With really <b>exciting</b> content..."
+        //    }
+
+        // Create body content first. since only need body for patch request
+        String body2 = "Review By : " + review.getName() + "<br><br>";
+        String body3 = "<img src='" + review.getMealPicture() + "'><br><br>";
+        String body4 = review.getReviewTitle() + "<br>";
+        String body5 = review.getReviewMessage() + "<br><br>";
+        String body6 = "Recipe ID: " + review.getIdMeal() + "<br><br>";
+
+        // Concant all bodies
+        String content = body2 + body3 + body4 + body5 + body6;
+
+        // Create json object by parts first
+        JsonObject blogidObject = Json.createObjectBuilder().add("id", blogId).build();
+        String selfLink = Url.selfLink.replace("{BLOGID}", blogId);
+        String selfLink2 = selfLink.replace("{POSTID}", review.getPostId());
+
+        JsonObject built = Json.createObjectBuilder()
+                .add("kind", "blogger#post")
+                .add("id", review.getPostId())
+                .add("blog", blogidObject)
+                .add("url", review.getBloggerUrl())
+                .add("selfLink", selfLink2)
+                .add("title", "Review for " + review.getMealTitle())
+                .add("content", content)
+                .build();
+
+        return built;
+
+    }
+
+    public Boolean patchToBlogger(Review review) {
+        //create the json data to patch to blogger
+        //custom method to prepare teh json data, different from the post method one
+
+        JsonObject jsonPayload = createJsonDataPatch(review);
+
+        // refresh the authcode
+        String authCode = refreshAuthCode();
+
+        // PATCH NOT SUPPORTED BY RESTTEMPLATE
+        // USE TRAIDITIONAL PUT METHOD API BLOGGER ISNTEAD
+        // PATCH https://www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/3445355871727114160
+        // Authorization: /* OAuth 2.0 token here */
+        // Content-Type: application/json
+
+        String appendedUrl1 = Url.updatePost.replace("{BLOGID}", blogId);
+        String appendedUrl2 = appendedUrl1.replace("{POSTID}", review.getPostId());
+        String appendedUrl3 = appendedUrl2.replace("{APIKEY}", apiKey);
+
+        RequestEntity<String> request = RequestEntity
+                .put(appendedUrl3)
+                .header("Authorization", "Bearer " + authCode)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(jsonPayload.toString(), String.class);
+
+        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+
+        // take resp then get the updated date and update the redis
+        JsonReader jr = Json.createReader(new StringReader(response.getBody()));
+        JsonObject jo = jr.readObject();
+
+        String updated = jo.getString("updated");
+
+        //format the date thingy
+        // Parse the input string to ZonedDateTime
+        ZonedDateTime zonedDateTime = ZonedDateTime.parse(updated);
+
+        // Convert ZonedDateTime to epoch (seconds since Unix epoch)
+        long epoch = zonedDateTime.toEpochSecond();
+
+        review.setPublishOnEpoch(epoch);
+
+        // add back redis
+        updateReviewStage2(review);
+    
+        return true;
+    }
+
+    public void updateReviewStage2(Review review){
+        //helper method to update the review in redis
+
+        //just want to updae title/message/publishedon
+
+        String existingReviews = mp.get(RedisKeys.ccwReviews, review.getEmail());
+
+        JsonReader jr = Json.createReader(new StringReader(existingReviews));
+        JsonObject existingReviewRecords = jr.readObject();
+        JsonArray existingReviewArray = existingReviewRecords.getJsonArray("reviews");
+
+        JsonArrayBuilder updatedReviewsBuilder = Json.createArrayBuilder();
+
+        // loops through the array of reviews
+        // finds matching postid then update
+        for (int i = 0; i < existingReviewArray.size(); i++) {
+            JsonObject aReview = existingReviewArray.getJsonObject(i);
+
+            if (aReview.getString("postId").equals(review.getPostId())) {
+                // update the review
+                // override whatever with the same hashkey
+                JsonObject updatedReview = Json.createObjectBuilder(aReview)
+                        .add("reviewTitle", review.getReviewTitle())
+                        .add("reviewMessage", review.getReviewMessage())
+                        .add("publishOnEpoch", review.getPublishOnEpoch())
+                        .build();
+
+                updatedReviewsBuilder.add(updatedReview);
+            }
+        }
+
+        JsonArray updatedArray = updatedReviewsBuilder.build();
+        
+        JsonObject updatedRecords = Json.createObjectBuilder(existingReviewRecords)
+                .add("reviews", updatedArray)
+                .build();
+        
+        mp.update(RedisKeys.ccwReviews, review.getEmail(), updatedRecords.toString());
     }
 
 

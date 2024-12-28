@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Reviews</title>
+
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -13,6 +13,7 @@
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <title>Edit Review</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
@@ -120,6 +121,7 @@
         </div>
       </div>
     </nav>
+
     <div class="container">
       <br>
       <div th:if="${message}" class="alert alert-success">
@@ -127,57 +129,39 @@
       </div>
 
       <div th:if="${message2}" class="alert alert-danger">
-        <span th:text="${message2}"></p>
-        <br>
+        <span th:text="${message2}"></span>
       </div>
 
-      <h1>My Reviews</h1>
+      <h2>Updating Review for <span th:text="${review.mealTitle}"></span></h2>
       <br>
+      <img th:src="${review.mealPicture}" alt="Recipe Image" style="width: 100%; height: auto; max-width: 600px; display: inline-block;"/>
+      <br><br><br>
 
-      <div th:if="${reviews.size() > 0}">
-        <table class="table table-dark table-striped">
-            <thead>
-                <tr>
-                    <th width="25%">Image</th>
-                    <th>Review</th>
-                    <th width="15%">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="eachReview : ${reviews}">
-                  <td>
-                    <img th:src="${eachReview.mealPicture}" alt="Dish Image" style="width: 100%;">
-                  </td>
-                  <td>
-                    <h5 th:text="${eachReview.mealTitle}"></h5><br>
-                    <h6 th:text="${eachReview.reviewTitle}" style="text-decoration: underline;"></h6>
-                    <span th:text="${eachReview.reviewMessage}"></span>
-                    <br><br>Recipe ID: <span th:text="${eachReview.idMeal}"></span>
-                    <br><br>Reviewed By:<br>
-                    <span th:text="${eachReview.name}"></span> on
-                    <span th:text="${eachReview.helperDate}"></span>
-                  </td>
-                  <td>
-                    <a class="btn btn-primary w-100" th:href="${eachReview.bloggerUrl}" target="_blank">View on Blogger</a>
-                    <br><br>
-                    <a class="btn btn-success w-100" th:href="@{/recipe/view/{recipe-id}(recipe-id=${eachReview.idMeal})}">View The Recipe</a>
-                    <br><br>
-                    <a class="btn btn-warning w-100" th:href="@{/review/update/{post-id}(post-id=${eachReview.postId})}">Update The Review</a>
-                    <br><br>
-                    <a class="btn btn-danger w-100" th:href="@{/review/delete/{post-id}(post-id=${eachReview.postId})}">Delete The Review</a>
-                  </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <div th:if="${reviews.size() == 0}">
-        <p>You have not left any reviews. You can check out the community reviews or whip something up too.</p>
-    </div>
+      <form method="POST" th:action="@{/review/update/{post-id}(post-id=${review.postId})}" th:object="${review}">
+        <input type="hidden" th:field="*{name}" th:value="${review.name}"/>
+        <input type="hidden" th:field="*{email}" th:value="${review.email}"/>
+        <input type="hidden" th:field="*{idMeal}" th:value="${review.idMeal}"/>
+        <input type="hidden" th:field="*{mealTitle}" th:value="${review.mealTitle}"/>
+        <input type="hidden" th:field="*{mealPicture}" th:value="${review.mealPicture}"/>
+        <input type="hidden" th:field="*{postId}" th:value="${review.postId}"/>
+        <input type="hidden" th:field="*{bloggerUrl}" th:value="${review.bloggerUrl}"/>
+        <input type="hidden" th:field="*{publishOnEpoch}" th:value="${review.publishOnEpoch}"/>
+    
+        <div class="mb-3">
+            <label for="reviewTitle" class="form-label">Title</label>
+            <input type="text" th:name="${reviewTItle}" class="form-control" th:field="*{reviewTitle}" placeholder="Review Title" required />
+        </div>
+    
+        <div class="mb-3">
+            <label for="reviewMessage" class="form-label">Message</label>
+            <textarea class="form-control" th:name="${reviewMessage}" th:field="*{reviewMessage}" required></textarea>
+        </div>
+        <br><br><br>
+    
+        <button type="submit" class="btn btn-primary">Update Review</button>
+    </form>
 
     <br><br><br><br><br>
-    <button onclick="window.scrollTo({ top: 0, behavior: 'smooth' });" class="btn btn-primary" style="position: fixed; bottom: 15px; right: 15px;">
-      <img src="/images/chevrons-up.svg" alt="Back to Top" style="color: white;"/>
-    </button>
     
     </div>
   </body>
