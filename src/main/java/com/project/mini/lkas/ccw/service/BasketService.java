@@ -256,9 +256,9 @@ public class BasketService {
     public void editBasket(String basketId, String basketName, List<String> ingredients, String user) {
         // set the new values
 
-        Basket b = new Basket();
-        b.setId(basketId);
-        b.setIngredients(ingredients);
+        // Basket b = new Basket();
+        // b.setId(basketId);
+        // b.setIngredients(ingredients);
 
         // override/udpate the basket in redis
         String basketObject = mp.get(RedisKeys.ccwContainers, user);
@@ -300,6 +300,9 @@ public class BasketService {
                         .build();
                 
                 updatedBasketsBuilder.add(updatedBasket);
+            } else {
+                // if not the same id, just add the basket as it is
+                updatedBasketsBuilder.add(aBasket);
             }
         }
 
