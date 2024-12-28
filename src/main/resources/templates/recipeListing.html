@@ -161,7 +161,12 @@
                   <td>
                     <a class="btn btn-primary w-100" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View The Recipe</a>
                     <br><br>
-                    <a class="btn btn-success w-100" th:href="@{/recipe/quicksave/{recipe-id}(recipe-id=${eachListing.idMeal})}">Save The Recipe</a>
+                    <div th:if="${universalTitle == 'Ten Random Recipes'}">
+                      <a class="btn btn-success w-100" th:href="@{/recipe/randomTen/quicksave/{recipe-id}(recipe-id=${eachListing.idMeal})}">Save The Recipe</a>
+                    </div>
+                    <div th:if="${universalTitle == 'Latest Added Recipes'}">
+                      <a class="btn btn-success w-100" th:href="@{/recipe/latest/quicksave/{recipe-id}(recipe-id=${eachListing.idMeal})}">Save The Recipe</a>
+                    </div>
                   </td>
                 </tr>
             </tbody>

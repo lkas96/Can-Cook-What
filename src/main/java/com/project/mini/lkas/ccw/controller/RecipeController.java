@@ -24,8 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 
-
-
 @Controller
 @RequestMapping("/recipe")
 public class RecipeController {
@@ -43,7 +41,8 @@ public class RecipeController {
     private BasketService bs;
 
     @GetMapping("/find/{basket-id}")
-    public String getListOfRecipes(@PathVariable("basket-id") String basketId, HttpSession session, Model model, RedirectAttributes redirect) {
+    public String getListOfRecipes(@PathVariable("basket-id") String basketId, HttpSession session, Model model,
+            RedirectAttributes redirect) {
 
         // Retrieve Ingredient converted String
         String currentUser = (String) session.getAttribute("loggedInUser");
@@ -82,8 +81,8 @@ public class RecipeController {
         List<String> ingredients = rs.retrieveIngredientList(recipe);
         model.addAttribute("list", ingredients);
 
-        //Save the most current recipe details to session
-        //Used in ReviewController.java
+        // Save the most current recipe details to session
+        // Used in ReviewController.java
         session.setAttribute("currentRecipe", recipe);
 
         return "recipeDetails";
@@ -114,14 +113,15 @@ public class RecipeController {
 
         List<Listing> listings = rrs.retrieveSavedRecipes(currentUser);
 
-        model.addAttribute("listings", listings);       
+        model.addAttribute("listings", listings);
 
         return "saveListing";
 
     }
 
     @GetMapping("/delete/{recipe-id}")
-    public String deleteSavedListing(@PathVariable("recipe-id") String recipeId, HttpSession session, RedirectAttributes redirect) {
+    public String deleteSavedListing(@PathVariable("recipe-id") String recipeId, HttpSession session,
+            RedirectAttributes redirect) {
         // Get current user
         String currentUser = (String) session.getAttribute("loggedInUser");
 
@@ -129,14 +129,15 @@ public class RecipeController {
         rs.deleteSavedRecipe(currentUser, recipeId);
 
         String message = "Recipe has been deleted successfully.";
-        
+
         redirect.addFlashAttribute("message", message);
 
         return "redirect:/recipe/saved";
     }
 
     @GetMapping("/randomOne")
-    public String getRandomRecipe(Model model, HttpSession session) throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
+    public String getRandomRecipe(Model model, HttpSession session)
+            throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
         // Call the random recipe api
         Recipe recipe = lrs.getRandomRecipe();
         model.addAttribute("recipe", recipe);
@@ -150,8 +151,8 @@ public class RecipeController {
         List<String> ingredients = rs.retrieveIngredientList(recipe);
         model.addAttribute("list", ingredients);
 
-        //Save the most current recipe details to session
-        //Used in ReviewController.java
+        // Save the most current recipe details to session
+        // Used in ReviewController.java
         session.setAttribute("currentRecipe", recipe);
 
         return "recipeDetails";
@@ -163,10 +164,35 @@ public class RecipeController {
         List<Listing> listings = lrs.getRandomTenRecipe();
         model.addAttribute("listings", listings);
 
-        //save in session to persist for quicksave function
+        // save in session to persist for quicksave function
         session.setAttribute("tenlistings", listings);
 
         String title = "Ten Random Recipes";
+        model.addAttribute("universalTitle", title);
+
+        // helper to show the save button
+        model.addAttribute("save", "true");
+
+        return "recipeListing";
+    }
+
+    @GetMapping("/randomTen/quicksave/{recipe-id}")
+    public String quickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+
+        // retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("tenlistings"));
+
+        String message = "Recipe has been saved successfully.";
+        // redirect.addFlashAttribute("message", message);
+        model.addAttribute("message", message);
+
+        String title = "Ten Random Recipes";
+        // redirect.addFlashAttribute("universalTitle", title);
         model.addAttribute("universalTitle", title);
 
         // helper to show the save button
@@ -195,12 +221,12 @@ public class RecipeController {
 
         String title = "Matching Recipes Found";
         model.addAttribute("universalTitle", title);
-        
+
         return "recipeListing";
     }
 
     @GetMapping("/basket")
-    public String searchWithBasket(Model model, HttpSession session){
+    public String searchWithBasket(Model model, HttpSession session) {
         List<Basket> baskets = new ArrayList<>();
 
         String currentUser = (String) session.getAttribute("loggedInUser");
@@ -215,45 +241,35 @@ public class RecipeController {
         return "basketListing";
     }
 
-    @GetMapping("/quicksave/{recipe-id}")
-    public String quickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
-            RedirectAttributes redirect) {
-
-        // Get user, send user and recipe ID to redis
-        String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
-
-        //retrieve from saved attributed to show the same list of recipes
-        model.addAttribute("listings", session.getAttribute("tenlistings"));
-        
-
-        String message = "Recipe has been saved successfully.";
-        // redirect.addFlashAttribute("message", message);
-        model.addAttribute("message", message);
-
-
-        String title = "Ten Random Recipes";
-        // redirect.addFlashAttribute("universalTitle", title);
-        model.addAttribute("universalTitle", title);
-
-        // helper to show the save button
-        model.addAttribute("save", "true");
-
-        return "recipeListing";
-    }
-
     @GetMapping("/latest")
-    public String latestRecipesAdded(Model model) {
+    public String latestRecipesAdded(Model model, HttpSession session) {
         List<Listing> listings = rrs.retrieveLatestRecipes();
 
         model.addAttribute("listings", listings);
+
+        // save in session to persist for quicksave function
+        session.setAttribute("latestListings", listings);
 
         String title = "Latest Added Recipes";
         model.addAttribute("universalTitle", title);
 
         return "recipeListing";
     }
-    
-    
+
+    @GetMapping("/latest/quicksave/{recipe-id}")
+    public String latestQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("latestListings"));
+
+        String message = "Recipe has been saved successfully.";
+        model.addAttribute("message", message);
+
+        String title = "Latest Added Recipes";
+        model.addAttribute("universalTitle", title);
+
+        return "recipeListing";
+    }
 
 }
