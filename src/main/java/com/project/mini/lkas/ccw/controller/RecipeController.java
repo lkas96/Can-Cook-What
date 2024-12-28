@@ -64,6 +64,9 @@ public class RecipeController {
         model.addAttribute("listings", results);
         model.addAttribute("universalTitle", "Matching Recipes Found");
 
+        // save into session for quicksave feature
+        session.setAttribute("searchListings", results);
+
         return "recipeListing";
     }
 
@@ -210,7 +213,7 @@ public class RecipeController {
     }
 
     @PostMapping("/search")
-    public String searchRecipe(@RequestParam String search, Model model) {
+    public String searchRecipe(@RequestParam String search, Model model, HttpSession session) {
         List<Listing> listings = ls.searchRecipe(search);
 
         if (listings.isEmpty()) {
@@ -224,6 +227,9 @@ public class RecipeController {
 
         String title = "Matching Recipes Found";
         model.addAttribute("universalTitle", title);
+
+        // save into session for quicksave feature
+        session.setAttribute("searchListings", listings);
 
         return "recipeListing";
     }
@@ -263,6 +269,10 @@ public class RecipeController {
     public String latestQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
             RedirectAttributes redirect) {
 
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("latestListings"));
 
@@ -270,6 +280,24 @@ public class RecipeController {
         model.addAttribute("message", message);
 
         String title = "Latest Added Recipes";
+        model.addAttribute("universalTitle", title);
+
+        return "recipeListing";
+    }
+
+    @GetMapping("/matching/quicksave/{recipe-id}")
+    public String matchingQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("searchListings"));
+
+        String message = "Recipe has been saved successfully.";
+        // redirect.addFlashAttribute("message", message);
+        model.addAttribute("message", message);
+
+        String title = "Matching Recipes Found";
+        // redirect.addFlashAttribute("universalTitle", title);
         model.addAttribute("universalTitle", title);
 
         return "recipeListing";
