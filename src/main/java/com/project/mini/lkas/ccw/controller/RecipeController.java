@@ -158,10 +158,13 @@ public class RecipeController {
     }
 
     @GetMapping("/randomTen")
-    public String getTenRandomRecipe(Model model) {
+    public String getTenRandomRecipe(Model model, HttpSession session) {
         // Call the random recipe api
         List<Listing> listings = lrs.getRandomTenRecipe();
         model.addAttribute("listings", listings);
+
+        //save in session to persist for quicksave function
+        session.setAttribute("tenlistings", listings);
 
         String title = "10 Random Recipes";
         model.addAttribute("universalTitle", title);
@@ -217,11 +220,18 @@ public class RecipeController {
         String currentUser = (String) session.getAttribute("loggedInUser");
         rs.saveRecipe(currentUser, recipeId);
 
-        String message = "Recipe has been saved successfully.";
-        redirect.addFlashAttribute("message", message);
+        //retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("tenlistings"));
+        
 
-        String title = "My Saved Recipes";
-        redirect.addFlashAttribute("univeralMessage", title);
+        String message = "Recipe has been saved successfully.";
+        // redirect.addFlashAttribute("message", message);
+        model.addAttribute("message", message);
+
+
+        String title = "10 Random Recipes";
+        // redirect.addFlashAttribute("universalTitle", title);
+        model.addAttribute("universalTitle", title);
 
         return "recipeListing";
     }

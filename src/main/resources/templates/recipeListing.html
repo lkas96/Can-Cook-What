@@ -121,6 +121,9 @@
 
     <div class="container">
       <br>
+      <div th:if="${message}" class="alert alert-success">
+        <span th:utext="${message}"></span >
+      </div>
       <h1 th:utext="${universalTitle}"></h1>
       <br>
 
@@ -142,9 +145,9 @@
                     Recipe ID: <span th:utext="${eachListing.idMeal}"></span>
                   </td>
                   <td>
-                    <a class="btn btn-primary w-100" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View Recipe</a>
+                    <a class="btn btn-primary w-100" th:href="@{/recipe/view/{meal-id}(meal-id=${eachListing.idMeal})}">View The Recipe</a>
                     <br><br>
-                    <a class="btn btn-success w-100" th:href="@{/recipe/quicksave/{recipe-id}(recipe-id=${eachListing.idMeal})}">Quick Save</a>
+                    <a class="btn btn-success w-100" th:href="@{/recipe/quicksave/{recipe-id}(recipe-id=${eachListing.idMeal})}">Save The Recipe</a>
                   </td>
                 </tr>
             </tbody>
