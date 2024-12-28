@@ -26,6 +26,10 @@ public class Url {
     // www.themealdb.com/api/json/v1/1/search.php?s=Arrabiata
     public static final String searchRecipe = "https://www.themealdb.com/api/json/v2/{APIKEY}/search.php?s={SEARCHSTRING}";
 
+    // newly added recipes to mealdb api
+    // www.themealdb.com/api/json/v1/1/latest.php
+    public static final String latestRecipes = "https://www.themealdb.com/api/json/v2/{APIKEY}/latest.php";
+
     // BLOGGER POST URL
     // www.googleapis.com/blogger/v3/blogs/8070105920543249955/posts/
     public static final String postToBlogger = "https://www.googleapis.com/blogger/v3/blogs/{BLOGID}/posts/";

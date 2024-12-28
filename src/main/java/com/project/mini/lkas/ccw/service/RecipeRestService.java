@@ -84,4 +84,31 @@ public class RecipeRestService {
         return results;
     }
 
+    public List<Listing> retrieveLatestRecipes() {
+        List<Listing> newlyAdded = new ArrayList<>();
+
+        //take from mealdb api dduh
+        String appendedUrl = Url.latestRecipes.replace("{APIKEY}", LAWSONKEY);
+
+        String dataFromApi = restTemplate.getForObject(appendedUrl, String.class);
+
+        JsonReader jr = Json.createReader(new StringReader(dataFromApi));
+        JsonObject jo = jr.readObject();
+
+        JsonArray meals = jo.getJsonArray("meals");
+
+        for (int i = 0; i < meals.size(); i++) {
+            JsonObject meal = meals.getJsonObject(i);
+
+            Listing list = new Listing();
+            list.setStrMeal(meal.getString("strMeal"));
+            list.setStrMealThumb(meal.getString("strMealThumb"));
+            list.setIdMeal(meal.getString("idMeal"));
+
+            newlyAdded.add(list);
+        }
+
+        return newlyAdded;
+    }
+
 }

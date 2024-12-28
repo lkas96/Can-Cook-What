@@ -235,6 +235,18 @@ public class RecipeController {
 
         return "recipeListing";
     }
+
+    @GetMapping("/latest")
+    public String latestRecipesAdded(Model model) {
+        List<Listing> listings = rrs.retrieveLatestRecipes();
+
+        model.addAttribute("listings", listings);
+
+        String title = "Latest Recipes Added";
+        model.addAttribute("universalTitle", title);
+
+        return "recipeListing";
+    }
     
     
 
