@@ -307,7 +307,8 @@ public class RecipeController {
     }
 
     @GetMapping("/ingredient/quicksave/{recipe-id}")
-    public String ingredientQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+    public String ingredientQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model,
+            HttpSession session,
             RedirectAttributes redirect) {
 
         // Get user, send user and recipe ID to redis
@@ -324,8 +325,57 @@ public class RecipeController {
         // redirect.addFlashAttribute("universalTitle", title);
         model.addAttribute("universalTitle", title);
 
-        //helper save button persis
+        // helper save button persis
         model.addAttribute("ingredientSaveButton", true);
+
+        return "recipeListing";
+    }
+
+    @GetMapping("/browse/{letter}")
+    public String browseByLetter(@PathVariable("letter") String letter, Model model, HttpSession session) {
+        List<Listing> listings = ls.browseByLetter(letter);
+
+        model.addAttribute("listings", listings);
+
+        String title = "Recipes starting with " + letter.toUpperCase();
+
+        model.addAttribute("universalTitle", title);
+
+        // save into session for quicksave feature
+        session.setAttribute("letterListing", listings);
+
+        session.setAttribute("letterTitle", title);
+
+        // helper to show the save button
+        model.addAttribute("letterSaveButton", true);
+
+        if (listings.isEmpty()) {
+            model.addAttribute("universalMessage", "No recipes found with this letter. Please try another letter.");
+        }
+
+        return "recipeListing";
+    }
+
+    @GetMapping("/letter/quicksave/{recipe-id}")
+    public String letterQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
+            RedirectAttributes redirect) {
+
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
+        // retrieve from saved attributed to show the same list of recipes
+        model.addAttribute("listings", session.getAttribute("letterListing"));
+
+        String message = "Recipe has been saved successfully.";
+        // redirect.addFlashAttribute("message", message);
+        model.addAttribute("message", message);
+
+        String title = session.getAttribute("letterTitle").toString();
+        // redirect.addFlashAttribute("universalTitle", title);
+        model.addAttribute("universalTitle", title);
+
+        // helper save button persis
+        model.addAttribute("letterSaveButton", true);
 
         return "recipeListing";
     }

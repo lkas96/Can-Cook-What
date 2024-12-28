@@ -255,4 +255,38 @@ public class ListingService {
 
     }
 
+    public List<Listing> browseByLetter(String letter) {
+
+        //pass the letter to the mealadb api
+        List<Listing> results = new ArrayList<>();
+
+        String appendedUrl1 = Url.searchByLetter.replace("{APIKEY}", LAWSONKEY);
+        String appendedUrl2 = appendedUrl1.replace("{LETTER}", letter);
+
+        String jsonData = restTemplate.getForObject(appendedUrl2, String.class);
+
+        JsonReader jr = Json.createReader(new StringReader(jsonData));
+        JsonObject jo = jr.readObject();
+
+        if (jo.isNull("meals")) {
+            return results; // return empty array
+        }
+
+        JsonArray meals = jo.getJsonArray("meals");
+
+        for (int i = 0; i < meals.size(); i++) {
+
+            JsonObject meal = meals.getJsonObject(i);
+
+            Listing list = new Listing();
+            list.setStrMeal(meal.getString("strMeal"));
+            list.setStrMealThumb(meal.getString("strMealThumb"));
+            list.setIdMeal(meal.getString("idMeal"));
+
+            results.add(list);
+        }
+
+        return results;
+    }
+
 }
