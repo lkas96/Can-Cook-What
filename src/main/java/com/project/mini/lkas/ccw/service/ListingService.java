@@ -25,26 +25,20 @@ public class ListingService {
 
     public List<Listing> getListOfRecipes(String ingredientSearchString) {
 
-        // System.out.println("IN REST SERVICE NOW
-        // ------------------------------------------");
         List<Listing> results = new ArrayList<>();
 
         // Append URL to add the APIKEY value
         String appendedUrl1 = Url.searchByIngredients.replace("{APIKEY}", LAWSONKEY);
         String appendedUrl2 = appendedUrl1.replace("{INGREDIENTS}", ingredientSearchString);
 
-        System.out.println(appendedUrl2);
 
         // Eexternal api returns array of meals
         // json convert back to object
         // add to result array and return
-        System.out.println("ATTEMPING TO GET DATA FROM EXTERNAL API");
         String jsonData = restTemplate.getForObject(appendedUrl2, String.class);
 
         JsonReader jr = Json.createReader(new StringReader(jsonData));
         JsonObject jo = jr.readObject();
-
-        // System.out.println(jo);
 
         if (jo.isNull("meals")) {
             return results; // return empty array
@@ -79,14 +73,8 @@ public class ListingService {
         // add to result array and return
         String jsonData = restTemplate.getForObject(appendedUrl, String.class);
 
-        // ResponseEntity<String> response = restTemplate.exchange(appendedUrl2,
-        // HttpMethod.GET, HttpEntity.EMPTY, String.class);
-        // System.out.println("Headers: " + response.getHeaders());
-
         JsonReader jr = Json.createReader(new StringReader(jsonData));
         JsonObject jo = jr.readObject();
-
-        // System.out.println(jo);
 
         JsonArray meals = jo.getJsonArray("meals");
 

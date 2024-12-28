@@ -32,14 +32,11 @@ public class LoginService {
 
         JsonObject jo = jr.readObject();
 
-        // System.out.println(jo.getString("password"));
-        // System.out.println(password);
-
         if (password.equals(jo.getString("password"))){
-            // System.out.println("correct leh");
+
             return true;
         } else {
-            // System.out.println("wrong leh");
+            
             return false; // MMeans incorrect pw
         }
     }

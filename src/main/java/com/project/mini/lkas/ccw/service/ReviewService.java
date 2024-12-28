@@ -425,18 +425,12 @@ public class ReviewService {
 
     public Review getReviewById(String postId, String currentUserEmail) {
 
-        // System.out.println("------------------------------------------------------------");
-        // System.out.println("REVIEW CALLED");;
-        // System.out.println("POST ID: " + postId);
-
         String reviewObject = mp.get(RedisKeys.ccwReviews, currentUserEmail);
 
         JsonReader jr = Json.createReader(new StringReader(reviewObject));
         JsonObject jo = jr.readObject();
         JsonArray reviewArray = jo.getJsonArray("reviews");
 
-        // System.out.println("------------------------------------------------------------");
-        // System.out.println("REVIEW ARRAY : " + reviewArray.toString());
 
         for (int i = 0; i < reviewArray.size(); i++) {
 
@@ -444,9 +438,6 @@ public class ReviewService {
 
             // Match the post id found
             if (aReview.getString("postId").equals(postId)) {
-
-                // System.out.println("------------------------------------------------------------");
-                // System.out.println("gotten the review details : " + aReview.toString());
 
                 Review r = new Review();
                 r.setName(aReview.getString("name"));
@@ -477,9 +468,6 @@ public class ReviewService {
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy hh:mm");
                 String formattedDate = singaporeTime.format(formatter);
                 r.setHelperDate(formattedDate);
-
-                // System.out.println("------------------------------------------------------------");
-                // System.out.println("gotten the review details : " + r.toString());
 
                 return r;
 

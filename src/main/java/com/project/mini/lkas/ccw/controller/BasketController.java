@@ -91,9 +91,6 @@ public class BasketController {
 
         bs.deleteBasket(user, basketId);
 
-        System.out.println("Basket ID: " + basketId);
-        System.out.println("Basket Name: " + basketName);
-
         String message = "Basket (" + basketName + ") has been deleted.";
 
         redirect.addFlashAttribute("message", message);
@@ -148,9 +145,6 @@ public class BasketController {
             // get session attributes
             Basket b = (Basket) session.getAttribute("basket");
             String ing = (String) session.getAttribute("ingredients");
-
-            System.out.println("Basket: " + b);
-            System.out.println("Ingredients: " + ing);
 
             redirect.addFlashAttribute("basket", (Basket) session.getAttribute("basket"));
             redirect.addFlashAttribute("ingredients", (String) session.getAttribute("ingredients"));

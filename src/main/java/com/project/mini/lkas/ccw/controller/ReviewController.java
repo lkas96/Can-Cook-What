@@ -134,9 +134,6 @@ public class ReviewController {
 
     @GetMapping("/update/{post-id}")
     public String updateForm(@PathVariable("post-id") String postId, Model model, HttpSession session) {
-        // System.out.println("------------------------------------------------------------");
-        // System.out.println("CONTROLLER CALLED");;
-        // System.out.println("POST ID: " + postId);
 
         String currentUserEmail = (String) session.getAttribute("loggedInUser");
 
@@ -152,10 +149,6 @@ public class ReviewController {
     public String updateReview(@PathVariable("post-id") String postId, @ModelAttribute Review review, HttpSession session, RedirectAttributes redirect) {
         
         String currentUser = (String) session.getAttribute("loggedInUser");
-
-        System.out.println("POST ID: " + postId);
-        System.out.println("REVIEW ID: " + review.getPostId());
-        System.out.println("REVIEW TITLE: " + review.getReviewTitle()); //so new title do get passed in, assuming message is too
 
         // now do the update metod duh
         Boolean successful1 = rs.updateReview(postId, review, currentUser);

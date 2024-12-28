@@ -122,8 +122,6 @@ public class BasketService {
 
             List<Basket> baskets = new ArrayList<>();
 
-            System.out.println("Basket Array Size: " + basketArray.size());
-
             // LOOP THROUGH FROM THE LAST INDEX
             // SO THE LATEST ONE WILL APPEAR ON TOP
             // ON THE BASKET LISTING PAGE YAAAAAS
