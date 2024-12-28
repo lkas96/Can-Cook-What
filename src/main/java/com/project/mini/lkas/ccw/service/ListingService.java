@@ -221,4 +221,13 @@ public class ListingService {
         return newlyAdded;
     }
 
+    public int getLatestMealsCount() {
+        //reuse retrievelatestrecipes method
+        //just count and return duh
+
+        List<Listing> latestMeals = retrieveLatestRecipes();
+
+        return latestMeals.size();
+    }
+
 }
