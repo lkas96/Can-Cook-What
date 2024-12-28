@@ -15,8 +15,7 @@ import com.project.mini.lkas.ccw.model.Basket;
 import com.project.mini.lkas.ccw.model.Listing;
 import com.project.mini.lkas.ccw.model.Recipe;
 import com.project.mini.lkas.ccw.service.BasketService;
-import com.project.mini.lkas.ccw.service.ListingRestService;
-import com.project.mini.lkas.ccw.service.RecipeRestService;
+import com.project.mini.lkas.ccw.service.ListingService;
 import com.project.mini.lkas.ccw.service.RecipeService;
 
 import jakarta.servlet.http.HttpSession;
@@ -32,10 +31,7 @@ public class RecipeController {
     private RecipeService rs;
 
     @Autowired
-    private ListingRestService lrs;
-
-    @Autowired
-    private RecipeRestService rrs;
+    private ListingService ls;
 
     @Autowired
     private BasketService bs;
@@ -49,7 +45,7 @@ public class RecipeController {
         String ingredientSearchString = rs.retrieveIngredientString(currentUser, basketId);
 
         // Call the RECIPE api
-        List<Listing> results = lrs.getListOfRecipes(ingredientSearchString);
+        List<Listing> results = ls.getListOfRecipes(ingredientSearchString);
 
         if (results.isEmpty()) {
             String message = "No recipes found with these combination of ingredients. Please try other combinations.";
@@ -70,7 +66,7 @@ public class RecipeController {
 
         // Get the recipe details
         // Instantiate recipe object
-        Recipe recipe = lrs.getRecipeDetails(recipeId);
+        Recipe recipe = ls.getRecipeDetails(recipeId);
         model.addAttribute("recipe", recipe);
 
         // Helper method for ingredient measurement pair
@@ -111,7 +107,7 @@ public class RecipeController {
         // Get current user
         String currentUser = (String) session.getAttribute("loggedInUser");
 
-        List<Listing> listings = rrs.retrieveSavedRecipes(currentUser);
+        List<Listing> listings = rs.retrieveSavedRecipes(currentUser);
 
         model.addAttribute("listings", listings);
 
@@ -139,7 +135,7 @@ public class RecipeController {
     public String getRandomRecipe(Model model, HttpSession session)
             throws NoSuchMethodException, SecurityException, IllegalAccessException, InvocationTargetException {
         // Call the random recipe api
-        Recipe recipe = lrs.getRandomRecipe();
+        Recipe recipe = ls.getRandomRecipe();
         model.addAttribute("recipe", recipe);
 
         // Get ingredients thingy
@@ -161,7 +157,7 @@ public class RecipeController {
     @GetMapping("/randomTen")
     public String getTenRandomRecipe(Model model, HttpSession session) {
         // Call the random recipe api
-        List<Listing> listings = lrs.getRandomTenRecipe();
+        List<Listing> listings = ls.getRandomTenRecipe();
         model.addAttribute("listings", listings);
 
         // save in session to persist for quicksave function
@@ -208,7 +204,7 @@ public class RecipeController {
 
     @PostMapping("/search")
     public String searchRecipe(@RequestParam String search, Model model) {
-        List<Listing> listings = lrs.searchRecipe(search);
+        List<Listing> listings = ls.searchRecipe(search);
 
         if (listings.isEmpty()) {
             String message = "No recipes found. Please try another search term for the dish name or make sure the recipe ID you are looking up is 5 digits long.";
@@ -243,7 +239,7 @@ public class RecipeController {
 
     @GetMapping("/latest")
     public String latestRecipesAdded(Model model, HttpSession session) {
-        List<Listing> listings = rrs.retrieveLatestRecipes();
+        List<Listing> listings = ls.retrieveLatestRecipes();
 
         model.addAttribute("listings", listings);
 
