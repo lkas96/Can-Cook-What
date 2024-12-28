@@ -161,7 +161,7 @@ public class RecipeService {
         JsonObject jo = jr.readObject();
         JsonArray savedRecipes = jo.getJsonArray("recipe_id");
 
-        for (int i = 0; i < savedRecipes.size(); i++) {
+        for (int i = savedRecipes.size() - 1; i >= 0 ; i--) {
             String recipeId = savedRecipes.getString(i);
 
             // get recipe details from external api
