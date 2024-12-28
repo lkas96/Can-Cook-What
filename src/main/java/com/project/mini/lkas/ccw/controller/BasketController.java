@@ -83,7 +83,8 @@ public class BasketController {
     }
 
     @GetMapping("/delete")
-    public String postMethodName(@RequestParam("basket-name") String basketName, @RequestParam("basket-id") String basketId, RedirectAttributes redirect,
+    public String postMethodName(@RequestParam("basket-name") String basketName,
+            @RequestParam("basket-id") String basketId, RedirectAttributes redirect,
             HttpSession session) {
 
         String user = (String) session.getAttribute("loggedInUser");
@@ -117,7 +118,7 @@ public class BasketController {
 
         model.addAttribute("basket", b);
 
-        //Save to session for edit if got errors
+        // Save to session for edit if got errors
         session.setAttribute("basket", b);
         session.setAttribute("ingredients", ingredients);
 
@@ -130,7 +131,7 @@ public class BasketController {
 
         String message = "Basket has been updated successully.";
 
-        //validate inrgedients first
+        // validate inrgedients first
         // primary processing
         List<String> ingredientList = Arrays.asList(ingredients.split(","));
 
@@ -144,7 +145,7 @@ public class BasketController {
         if (invalidIngredient.size() > 0) {
             redirect.addFlashAttribute("invalidIngredient", invalidIngredient);
 
-            //get session   attributes
+            // get session attributes
             Basket b = (Basket) session.getAttribute("basket");
             String ing = (String) session.getAttribute("ingredients");
 
@@ -159,10 +160,6 @@ public class BasketController {
 
         // if valid, update the basket
         bs.editBasket(id, name, ingredientList, (String) session.getAttribute("loggedInUser"));
-
-
-
-
 
         redirect.addFlashAttribute("message", message);
 
