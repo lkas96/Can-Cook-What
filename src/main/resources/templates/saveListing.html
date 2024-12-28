@@ -35,7 +35,7 @@
             <!-- Item 2-->
             <li class="nav-item dropdown">
               <a
-                class="nav-link dropdown-toggle"
+                class="nav-link dropdown-toggle "
                 href="#"
                 role="button"
                 data-bs-toggle="dropdown"
@@ -67,6 +67,9 @@
               <ul class="dropdown-menu">
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" th:href="@{/recipe/latest}">Latest Added Recipes</a>
                 </li>
                 <li>
                   <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
@@ -117,7 +120,6 @@
         </div>
       </div>
     </nav>
-
     <div class="container">
       <br>
       <div th:if="${message}" class="alert alert-success">
