@@ -124,7 +124,16 @@
       <div th:if="${message}" class="alert alert-success">
         <span th:utext="${message}"></span >
       </div>
-      <h1 th:utext="${universalTitle}"></h1>
+      <table width="100%">
+        <tr>
+          <td>
+            <h1 th:utext="${universalTitle}"></h1>
+          </td>
+          <td style="text-align: right; white-space: nowrap;">
+            <a class="btn btn-primary" th:href="@{/recipe/randomTen}">Generate another 10 recipes</a>
+          </td>
+        </tr>
+      </table>
       <br>
 
       <div th:if="${listings.size() > 0}">
