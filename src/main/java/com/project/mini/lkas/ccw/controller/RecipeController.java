@@ -289,6 +289,9 @@ public class RecipeController {
     public String matchingQuickSaveRecipe(@PathVariable("recipe-id") String recipeId, Model model, HttpSession session,
             RedirectAttributes redirect) {
 
+        // Get user, send user and recipe ID to redis
+        String currentUser = (String) session.getAttribute("loggedInUser");
+        rs.saveRecipe(currentUser, recipeId);
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("searchListings"));
 
