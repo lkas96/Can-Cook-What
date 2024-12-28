@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home</title>
         <!-- Bootstrap CSS -->
         <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -119,72 +119,38 @@
       </div>
     </div>
   </nav>
-
-    <h1>HOME</h1>
+  <div class="container">
     <br>
-    <h3>Recipe Of The Day</h3>
+    <h1 th:utext="${welcomeMessage}"></h1>
+    <br>
+
+    <h4>Recipe Of The Day : <span th:utext="${recipe.strMeal}"></span></h4>
     <table>
-        <tr>
-            <td>
-                <p>recipes pulled from AAPPI / bla /bla /bla descriptions</p>
-                <p>recipes pulled from AAPPI / bla /bla /bla descriptions</p>
-                <p>recipes pulled from AAPPI / bla /bla /bla descriptions</p>
-                <p>recipes pulled from AAPPI / bla /bla /bla descriptions</p>
-            </td>
-            <td>
-                <p>IMAGE IMAGE IMAGE OF DISH</p>
-            </td>
-        </tr>
+      <td>
+          <span>Click <a th:href="@{/recipe/view/{recipe-id}(recipe-id=${recipe.idMeal})}">here</a> to view the recipe.</span>
+          <br>
+          (Recipe ID: <span th:utext="${recipe.idMeal}"></span>)
+          <br><br>
+      <img th:src="${recipe.strMealThumb}" alt="Recipe Image" width="500" height="500">
+      </td>
     </table>
     <br><br>
-    <h3>Baskets</h3>
-    <table>
-        <th>Container 1</th>
-        <tr>
-            <td>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-            </td>
-            <td>
-                <p>button to go to manage container add/remove</p>
-                <p>button to go to find recipe with container</p>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <th>Container 2</th>
-        <tr>
-            <td>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-            </td>
-            <td>
-                <p>button to go to manage container add/remove</p>
-                <p>button to go to find recipe with container</p>
-            </td>
-        </tr>
-    </table>
-    <table>
-        <th>Container 3</th>
-        <tr>
-            <td>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-                <p>ingredients</p>
-            </td>
-            <td>
-                <p>button to go to manage container add/remove</p>
-                <p>button to go to find recipe with container</p>
-            </td>
-        </tr>
-    </table>
+
+    <h4 th:utext="${basketCountMessage}"></h4>
+    <span>Click <a th:href="@{/basket/create}">here</a> to create a new basket</span>
+    <br><br>
+
+    <h4>Recipe Updates</h4>
+    <span th:utext="${latestMealsCountMessage}"></span>
+    <span>Click <a th:href="@{/recipe/latest}">here</a> to view them.</span>
+
+    <br><br><br>
+    <br><br><br>
+  
+    
 
 
+  </div>
 
 </body>
 </html>
