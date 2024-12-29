@@ -42,7 +42,7 @@ public class LoginService {
     }
 
     public Boolean emailExists(String email){
-        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email);
+        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email.toLowerCase());
         
         if (emailExist != true) {
             return false; // Email not found

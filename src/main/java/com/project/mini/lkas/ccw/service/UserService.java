@@ -25,7 +25,7 @@ public class UserService {
         
         JsonObject jo = Json.createObjectBuilder()
                         .add("name", user.getName())
-                        .add("email", user.getEmail())
+                        .add("email", user.getEmail().toLowerCase())
                         .add("password", user.getPassword())
                         .build();
         
@@ -35,7 +35,7 @@ public class UserService {
     public Boolean emailRegistered(String email) {
         //Check against redis db
 
-        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email);
+        Boolean emailExist = mp.hashKeyExists(RedisKeys.ccwUsers, email.toLowerCase());
 
         if (emailExist == true) {
             return true; // Email exists
