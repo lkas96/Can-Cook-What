@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>com.project.mini.lkas.ccw</groupId>
 	<artifactId>can-cook-what</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0-RELEASE</version>
 	<name>can-cook-what</name>
 	<description>Can Cook What</description>
 	<url />
