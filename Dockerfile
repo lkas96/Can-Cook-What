@@ -25,7 +25,7 @@ ARG DEPLOY_DIR=/app
 WORKDIR ${DEPLOY_DIR}
 
 COPY --from=compiler /code_folder/target/can-cook-what-1.0-RELEASE.jar CanCookWhat.jar
-ENV SERVER_PORT=3232
+ENV SERVER_PORT=3000
 
 EXPOSE ${SERVER_PORT}
 
