@@ -1,4 +1,4 @@
-FROM eclipse-temurin:23-jdk AS compiler
+FROM openjdk:23-jdk-oracle AS compiler
 
 ARG COMPILE_DIR=/code_folder
 
@@ -18,14 +18,13 @@ ENV SERVER_PORT=3232
 EXPOSE ${SERVER_PORT}
 
 # stage 2
-FROM eclipse-temurin:23-jdk
+FROM openjdk:23-jdk-oracle
 
 ARG DEPLOY_DIR=/app
 
 WORKDIR ${DEPLOY_DIR}
 
 COPY --from=compiler /code_folder/target/can-cook-what-1.0-RELEASE.jar CanCookWhat.jar
-
 ENV SERVER_PORT=3232
 
 EXPOSE ${SERVER_PORT}
