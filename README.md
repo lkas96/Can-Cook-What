@@ -8,6 +8,7 @@ https://developers.google.com/blogger
 Ingredients are limited to mealdb database. Fortunately there are over 570 ingredients and 300 recipes available.
 Basket Creation and Search might be limited to the ingredient pool. 
 There are validation for accepted ingredients during basket creation.
+Recipe calls for 8 ingredients, if you add the same 8 ingredients into a basket, API have issues searching for that same exact recipe too. Known API limitation. Try to limit the ingredients in basket to 2-4 for best results. 
 
     For Example
     Potato is not accepted but potatoes are accepted. 
@@ -27,3 +28,8 @@ As of 29 December 2024
 4. Generate 1/10 random recipes for surprise or nspiration.
 5. Review and View other's reviews both on CanCookWhat/External Blog.
      Reviews are also posted to an external blog page. 
+
+# API Calls
+    /api/users -> Returns JSON of user name+email from redis db
+    /api/reviews -> Returns all blog reviews from blogger API
+    /api/ingredients -> Returns all ingredients from mealdb API
