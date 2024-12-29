@@ -696,6 +696,7 @@ public class RecipeService {
         Boolean ifExists = mp.hashKeyExists(RedisKeys.ccwSavedRecipes, user);
 
         if (ifExists) {
+
             // Existing saved recipes
             String existingSavedRecipes = mp.get(RedisKeys.ccwSavedRecipes, user);
 
@@ -774,5 +775,68 @@ public class RecipeService {
                 mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
             }
         }
+
+        // means not in redis yet just add
+        JsonObject newSavedRecipe = Json.createObjectBuilder()
+                .add("idMeal", recipe.getIdMeal())
+                .add("strMeal", recipe.getStrMeal())
+                .add("strCategory", recipe.getStrCategory())
+                .add("strArea", recipe.getStrArea())
+                .add("strInstructions", recipe.getStrInstructions())
+                .add("strMealThumb", recipe.getStrMealThumb())
+                .add("strYoutube", recipe.getStrYoutube())
+                .add("strIngredient1", recipe.getStrIngredient1())
+                .add("strIngredient2", recipe.getStrIngredient2())
+                .add("strIngredient3", recipe.getStrIngredient3())
+                .add("strIngredient4", recipe.getStrIngredient4())
+                .add("strIngredient5", recipe.getStrIngredient5())
+                .add("strIngredient6", recipe.getStrIngredient6())
+                .add("strIngredient7", recipe.getStrIngredient7())
+                .add("strIngredient8", recipe.getStrIngredient8())
+                .add("strIngredient9", recipe.getStrIngredient9())
+                .add("strIngredient10", recipe.getStrIngredient10())
+                .add("strIngredient11", recipe.getStrIngredient11())
+                .add("strIngredient12", recipe.getStrIngredient12())
+                .add("strIngredient13", recipe.getStrIngredient13())
+                .add("strIngredient14", recipe.getStrIngredient14())
+                .add("strIngredient15", recipe.getStrIngredient15())
+                .add("strIngredient16", recipe.getStrIngredient16())
+                .add("strIngredient17", recipe.getStrIngredient17())
+                .add("strIngredient18", recipe.getStrIngredient18())
+                .add("strIngredient19", recipe.getStrIngredient19())
+                .add("strIngredient20", recipe.getStrIngredient20())
+                .add("strMeasure1", recipe.getStrMeasure1())
+                .add("strMeasure2", recipe.getStrMeasure2())
+                .add("strMeasure3", recipe.getStrMeasure3())
+                .add("strMeasure4", recipe.getStrMeasure4())
+                .add("strMeasure5", recipe.getStrMeasure5())
+                .add("strMeasure6", recipe.getStrMeasure6())
+                .add("strMeasure7", recipe.getStrMeasure7())
+                .add("strMeasure8", recipe.getStrMeasure8())
+                .add("strMeasure9", recipe.getStrMeasure9())
+                .add("strMeasure10", recipe.getStrMeasure10())
+                .add("strMeasure11", recipe.getStrMeasure11())
+                .add("strMeasure12", recipe.getStrMeasure12())
+                .add("strMeasure13", recipe.getStrMeasure13())
+                .add("strMeasure14", recipe.getStrMeasure14())
+                .add("strMeasure15", recipe.getStrMeasure15())
+                .add("strMeasure16", recipe.getStrMeasure16())
+                .add("strMeasure17", recipe.getStrMeasure17())
+                .add("strMeasure18", recipe.getStrMeasure18())
+                .add("strMeasure19", recipe.getStrMeasure19())
+                .add("strMeasure20", recipe.getStrMeasure20())
+                .build();
+
+        // Add the new entry
+        JsonArray updatedReviewArray = Json.createArrayBuilder()
+                .add(newSavedRecipe)
+                .build();
+
+        // Update the JSON object
+        JsonObject updatedRecords = Json.createObjectBuilder()
+                .add("saved_recipes", updatedReviewArray)
+                .build();
+
+        mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
     }
 }
