@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Can Cook What - Features Page</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .hero {
+        position: relative; /* Ensure that the overlay and text are positioned correctly */
+        background: url("/images/IMG_20241229_125950.jpg") center/cover
+          no-repeat;
+        height: 600px;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4); /* Black overlay with 50% opacity */
+        z-index: 1; /* Overlay sits below the text */
+      }
+
+      .hero > * {
+        position: relative;
+        z-index: 2; /* Text appears above the overlay */
+      }
+
+      .hero h1 {
+        font-size: 3rem;
+      }
+
+      .hero p {
+        font-size: 1.25rem;
+      }
+
+      .features .feature {
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Vertically centers the content */
+        align-items: center; /* Horizontally centers the content */
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #f9f9f9;
+        min-height: 300px;
+      }
+
+      .features .feature img {
+        max-width: 100%; /* Make sure the image doesn't overflow */
+        height: auto;
+      }
+
+      .testimonials {
+        background: #f3f3f3;
+        padding: 50px 0;
+      }
+
+      footer {
+        background: #333;
+        color: white;
+        text-align: center;
+        padding: 20px;
+      }
+    </style>
+
+    <style>
+      html {
+        overflow-y: scroll;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <img
+            src="/images/OrangeIconOutline.svg"
+            alt="CanCookWhat"
+            height="50"
+          />
+          CanCookWhat
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/features.html"
+                >Features</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="/about.html"
+                >About</a
+              >
+            </li>
+          </ul>
+          <div class="d-flex">
+            <a
+              class="btn btn-outline-light"
+              target="_blank"
+              href="https://cancookwhatcommunity.blogspot.com/"
+              >Blog Reviews</a
+            >
+            &nbsp;&nbsp;&nbsp;
+            <a class="btn btn-primary" href="/login">Login</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <section class="container my-5">
+      <h1 class="text-center mb-5">Core Features</h1>
+
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+          <tbody>
+            <!-- Row 1-->
+            <tr>
+              <td class="align-middle">
+                <div class="card">
+                  <div class="card-body">
+                    <table>
+                      <tr>
+                        <td width="20%">
+                          <img
+                            src="/images/shopping-basket.svg"
+                            alt="Smart Ingredient Baskets"
+                            class="img-fluid rounded"
+                            style="width: 80%"
+                          />
+                        </td>
+                        <td>
+                          <h5 class="card-title">Smart Ingredient Baskets</h5><br>
+                          <ul>
+                            <li>
+                              Create and manage baskets of ingredients you
+                              already have.
+                            </li>
+                            <li>
+                              Discover recipes that perfectly match your
+                              basket's contents.
+                            </li>
+                            <li>
+                              Update and refine your basket anytime to reflect
+                              what’s in your kitchen.
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 1-->
+            <tr>
+              <td class="align-middle">
+                <div class="card">
+                  <div class="card-body">
+                    <table>
+                      <tr>
+                        <td width="20%">
+                        <img
+                        src="/images/recipe-book.svg"
+                        alt="Recipe Lookup"
+                        class="img-fluid rounded"
+                        style="width: 80%"
+                      />
+                        </td>
+                        <td>
+                          <h5 class="card-title">Recipe Lookup</h5><br>
+                          <ul>
+                            <li>
+                              Over 300 recipes in the database as of 30th December
+                              2024.
+                            </li>
+                            <li>
+                              Search recipes by name or recipe ID for quick access and
+                              viewing.
+                            </li>
+                            <li>
+                              Browse a rich library of community-reviewed recipes from
+                              A to Z.
+                            </li>
+                            <li>
+                              Save your favorite recipes for future use or share your
+                              reviews.
+                            </li>
+                            <li>
+                              Look up a random recipe or ten for cooking inspiration.
+                            </li>
+                            <li>View the latest recipes added to the database.</li>
+                          </ul>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 1-->
+            <tr>
+              <td class="align-middle">
+                <div class="card">
+                  <div class="card-body">
+                    <table>
+                      <tr>
+                        <td width="20%">
+                          <img
+                          src="/images/ingredients.svg"
+                          alt="Ingredients Database"
+                          class="img-fluid rounded"
+                          style="width: 80%"
+                        />
+                        </td>
+                        <td>
+                          <h5 class="card-title">Ingredients Database</h5><br>
+                          <ul>
+                            <li>
+                              Over 570 ingredients in the database as of 30th December
+                              2024.
+                            </li>
+                            <li>
+                              Add only recognized ingredients from our comprehensive
+                              database.
+                            </li>
+                            <li>
+                              Keep your baskets accurate and focused on what you have.
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Row 1-->
+            <tr>
+              <td class="align-middle">
+                <div class="card">
+                  <div class="card-body">
+                    <table>
+                      <tr>
+                        <td width="20%">
+                          <img
+                          src="/images/clipboard.svg"
+                          alt="Community Reviews"
+                          class="img-fluid rounded"
+                          style="width: 80%"
+                        />
+                        </td>
+                        <td>
+                          <h5 class="card-title">Community Reviews</h5><br>
+                          <ul>
+                            <li>
+                              Users can leave, manage, and update their reviews.
+                            </li>
+                            <li>
+                              Reviews are also posted to an external blog for wider
+                              sharing.
+                            </li>
+                            <li>
+                              Users can view all community reviews and gain insights
+                              from others.
+                            </li>
+                          </ul>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
