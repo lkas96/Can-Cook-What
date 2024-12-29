@@ -133,7 +133,7 @@
           <br>
           (Recipe ID: <span th:utext="${recipe.idMeal}"></span>)
           <br><br>
-      <img th:src="${recipe.strMealThumb}" alt="Recipe Image" width="500" height="500">
+          <img th:src="${recipe.strMealThumb}" alt="Recipe Image" class="responsive-image">
       </td>
     </table>
     <br><br>
@@ -156,3 +156,20 @@
 
 </body>
 </html>
+
+
+<style>
+  /* Responsive image styling */
+  .responsive-image {
+    max-width: 100%;  /* Ensures the image will never exceed its container's width */
+    height: auto;     /* Maintains the aspect ratio */
+    display: inline;  /* Makes the image inline with the text */
+  }
+
+  /* Media query for desktop */
+  @media (min-width: 768px) {
+    .responsive-image {
+      max-width: 500px;  /* Caps the max width to 500px on larger screens */
+    }
+  }
+</style>
