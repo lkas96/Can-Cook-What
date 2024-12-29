@@ -506,6 +506,9 @@ public class ReviewService {
 
                 updatedReviewsBuilder.add(updatedReview);
             }
+            else {
+                updatedReviewsBuilder.add(aReview);
+            }
         }
 
         // build and update the array finalizwe into redsi //put will auto combine ya da

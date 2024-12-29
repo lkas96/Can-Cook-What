@@ -224,8 +224,7 @@ public class RecipeService {
         // Check if the user got entries saved in the ccwSavedRecipes
         Boolean ifExists = mp.hashKeyExists(RedisKeys.ccwSavedRecipes, user);
 
-        if (ifExists == true) {
-            // Means have existing basket, so append the entry
+        if (ifExists) {
             String existingSavedRecipes = mp.get(RedisKeys.ccwSavedRecipes, user);
 
             JsonReader jr = Json.createReader(new StringReader(existingSavedRecipes));
@@ -233,133 +232,74 @@ public class RecipeService {
 
             JsonArray savedArray = savedRecords.getJsonArray("saved_recipes");
 
-            // Create Json Object for the new review
-            // the new {entry}
-            JsonObject newSavedRecipe = Json.createObjectBuilder()
-                    .add("idMeal", recipe.getIdMeal())
-                    .add("strMeal", recipe.getStrMeal())
-                    .add("strCategory", recipe.getStrCategory())
-                    .add("strArea", recipe.getStrArea())
-                    .add("strInstructions", recipe.getStrInstructions())
-                    .add("strMealThumb", recipe.getStrMealThumb())
-                    .add("strYoutube", recipe.getStrYoutube())
-                    .add("strIngredient1", recipe.getStrIngredient1())
-                    .add("strIngredient2", recipe.getStrIngredient2())
-                    .add("strIngredient3", recipe.getStrIngredient3())
-                    .add("strIngredient4", recipe.getStrIngredient4())
-                    .add("strIngredient5", recipe.getStrIngredient5())
-                    .add("strIngredient6", recipe.getStrIngredient6())
-                    .add("strIngredient7", recipe.getStrIngredient7())
-                    .add("strIngredient8", recipe.getStrIngredient8())
-                    .add("strIngredient9", recipe.getStrIngredient9())
-                    .add("strIngredient10", recipe.getStrIngredient10())
-                    .add("strIngredient11", recipe.getStrIngredient11())
-                    .add("strIngredient12", recipe.getStrIngredient12())
-                    .add("strIngredient13", recipe.getStrIngredient13())
-                    .add("strIngredient14", recipe.getStrIngredient14())
-                    .add("strIngredient15", recipe.getStrIngredient15())
-                    .add("strIngredient16", recipe.getStrIngredient16())
-                    .add("strIngredient17", recipe.getStrIngredient17())
-                    .add("strIngredient18", recipe.getStrIngredient18())
-                    .add("strIngredient19", recipe.getStrIngredient19())
-                    .add("strIngredient20", recipe.getStrIngredient20())
-                    .add("strMeasure1", recipe.getStrMeasure1())
-                    .add("strMeasure2", recipe.getStrMeasure2())
-                    .add("strMeasure3", recipe.getStrMeasure3())
-                    .add("strMeasure4", recipe.getStrMeasure4())
-                    .add("strMeasure5", recipe.getStrMeasure5())
-                    .add("strMeasure6", recipe.getStrMeasure6())
-                    .add("strMeasure7", recipe.getStrMeasure7())
-                    .add("strMeasure8", recipe.getStrMeasure8())
-                    .add("strMeasure9", recipe.getStrMeasure9())
-                    .add("strMeasure10", recipe.getStrMeasure10())
-                    .add("strMeasure11", recipe.getStrMeasure11())
-                    .add("strMeasure12", recipe.getStrMeasure12())
-                    .add("strMeasure13", recipe.getStrMeasure13())
-                    .add("strMeasure14", recipe.getStrMeasure14())
-                    .add("strMeasure15", recipe.getStrMeasure15())
-                    .add("strMeasure16", recipe.getStrMeasure16())
-                    .add("strMeasure17", recipe.getStrMeasure17())
-                    .add("strMeasure18", recipe.getStrMeasure18())
-                    .add("strMeasure19", recipe.getStrMeasure19())
-                    .add("strMeasure20", recipe.getStrMeasure20())
-                    .build();
+            // Check for duplicates
+            boolean exists = savedArray.stream()
+                    .map(JsonValue::asJsonObject)
+                    .anyMatch(obj -> obj.getString("idMeal").equals(recipe.getIdMeal()));
 
-            // add new entry to the array [{existing entry}, {added entry}]
-            JsonArray updatedReviewArray = Json.createArrayBuilder(savedArray)
-                    .add(newSavedRecipe)
-                    .build();
+            if (!exists) {
+                JsonObject newSavedRecipe = Json.createObjectBuilder()
+                        .add("idMeal", recipe.getIdMeal())
+                        .add("strMeal", recipe.getStrMeal())
+                        .add("strCategory", recipe.getStrCategory())
+                        .add("strArea", recipe.getStrArea())
+                        .add("strInstructions", recipe.getStrInstructions())
+                        .add("strMealThumb", recipe.getStrMealThumb())
+                        .add("strYoutube", recipe.getStrYoutube())
+                        .add("strIngredient1", recipe.getStrIngredient1())
+                        .add("strIngredient2", recipe.getStrIngredient2())
+                        .add("strIngredient3", recipe.getStrIngredient3())
+                        .add("strIngredient4", recipe.getStrIngredient4())
+                        .add("strIngredient5", recipe.getStrIngredient5())
+                        .add("strIngredient6", recipe.getStrIngredient6())
+                        .add("strIngredient7", recipe.getStrIngredient7())
+                        .add("strIngredient8", recipe.getStrIngredient8())
+                        .add("strIngredient9", recipe.getStrIngredient9())
+                        .add("strIngredient10", recipe.getStrIngredient10())
+                        .add("strIngredient11", recipe.getStrIngredient11())
+                        .add("strIngredient12", recipe.getStrIngredient12())
+                        .add("strIngredient13", recipe.getStrIngredient13())
+                        .add("strIngredient14", recipe.getStrIngredient14())
+                        .add("strIngredient15", recipe.getStrIngredient15())
+                        .add("strIngredient16", recipe.getStrIngredient16())
+                        .add("strIngredient17", recipe.getStrIngredient17())
+                        .add("strIngredient18", recipe.getStrIngredient18())
+                        .add("strIngredient19", recipe.getStrIngredient19())
+                        .add("strIngredient20", recipe.getStrIngredient20())
+                        .add("strMeasure1", recipe.getStrMeasure1())
+                        .add("strMeasure2", recipe.getStrMeasure2())
+                        .add("strMeasure3", recipe.getStrMeasure3())
+                        .add("strMeasure4", recipe.getStrMeasure4())
+                        .add("strMeasure5", recipe.getStrMeasure5())
+                        .add("strMeasure6", recipe.getStrMeasure6())
+                        .add("strMeasure7", recipe.getStrMeasure7())
+                        .add("strMeasure8", recipe.getStrMeasure8())
+                        .add("strMeasure9", recipe.getStrMeasure9())
+                        .add("strMeasure10", recipe.getStrMeasure10())
+                        .add("strMeasure11", recipe.getStrMeasure11())
+                        .add("strMeasure12", recipe.getStrMeasure12())
+                        .add("strMeasure13", recipe.getStrMeasure13())
+                        .add("strMeasure14", recipe.getStrMeasure14())
+                        .add("strMeasure15", recipe.getStrMeasure15())
+                        .add("strMeasure16", recipe.getStrMeasure16())
+                        .add("strMeasure17", recipe.getStrMeasure17())
+                        .add("strMeasure18", recipe.getStrMeasure18())
+                        .add("strMeasure19", recipe.getStrMeasure19())
+                        .add("strMeasure20", recipe.getStrMeasure20())
+                        .build();
 
-            // rebuild the new json object now
-            JsonObject updatedRecords = Json.createObjectBuilder(savedRecords)
-                    .add("saved_recipes", updatedReviewArray)
-                    .build();
+                JsonArray updatedReviewArray = Json.createArrayBuilder(savedArray)
+                        .add(newSavedRecipe)
+                        .build();
 
-            mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
+                JsonObject updatedRecords = Json.createObjectBuilder(savedRecords)
+                        .add("saved_recipes", updatedReviewArray)
+                        .build();
 
-        } else {
-
-            // means firsst saved enrty, so create it
-            JsonObject newSavedRecipe = Json.createObjectBuilder()
-                    .add("idMeal", recipe.getIdMeal())
-                    .add("strMeal", recipe.getStrMeal())
-                    .add("strCategory", recipe.getStrCategory())
-                    .add("strArea", recipe.getStrArea())
-                    .add("strInstructions", recipe.getStrInstructions())
-                    .add("strMealThumb", recipe.getStrMealThumb())
-                    .add("strYoutube", recipe.getStrYoutube())
-                    .add("strIngredient1", recipe.getStrIngredient1())
-                    .add("strIngredient2", recipe.getStrIngredient2())
-                    .add("strIngredient3", recipe.getStrIngredient3())
-                    .add("strIngredient4", recipe.getStrIngredient4())
-                    .add("strIngredient5", recipe.getStrIngredient5())
-                    .add("strIngredient6", recipe.getStrIngredient6())
-                    .add("strIngredient7", recipe.getStrIngredient7())
-                    .add("strIngredient8", recipe.getStrIngredient8())
-                    .add("strIngredient9", recipe.getStrIngredient9())
-                    .add("strIngredient10", recipe.getStrIngredient10())
-                    .add("strIngredient11", recipe.getStrIngredient11())
-                    .add("strIngredient12", recipe.getStrIngredient12())
-                    .add("strIngredient13", recipe.getStrIngredient13())
-                    .add("strIngredient14", recipe.getStrIngredient14())
-                    .add("strIngredient15", recipe.getStrIngredient15())
-                    .add("strIngredient16", recipe.getStrIngredient16())
-                    .add("strIngredient17", recipe.getStrIngredient17())
-                    .add("strIngredient18", recipe.getStrIngredient18())
-                    .add("strIngredient19", recipe.getStrIngredient19())
-                    .add("strIngredient20", recipe.getStrIngredient20())
-                    .add("strMeasure1", recipe.getStrMeasure1())
-                    .add("strMeasure2", recipe.getStrMeasure2())
-                    .add("strMeasure3", recipe.getStrMeasure3())
-                    .add("strMeasure4", recipe.getStrMeasure4())
-                    .add("strMeasure5", recipe.getStrMeasure5())
-                    .add("strMeasure6", recipe.getStrMeasure6())
-                    .add("strMeasure7", recipe.getStrMeasure7())
-                    .add("strMeasure8", recipe.getStrMeasure8())
-                    .add("strMeasure9", recipe.getStrMeasure9())
-                    .add("strMeasure10", recipe.getStrMeasure10())
-                    .add("strMeasure11", recipe.getStrMeasure11())
-                    .add("strMeasure12", recipe.getStrMeasure12())
-                    .add("strMeasure13", recipe.getStrMeasure13())
-                    .add("strMeasure14", recipe.getStrMeasure14())
-                    .add("strMeasure15", recipe.getStrMeasure15())
-                    .add("strMeasure16", recipe.getStrMeasure16())
-                    .add("strMeasure17", recipe.getStrMeasure17())
-                    .add("strMeasure18", recipe.getStrMeasure18())
-                    .add("strMeasure19", recipe.getStrMeasure19())
-                    .add("strMeasure20", recipe.getStrMeasure20())
-                    .build();
-
-            // add new entry to the array [{existing entry}, {added entry}]
-            JsonArray savedArray = Json.createArrayBuilder().add(newSavedRecipe).build();
-
-            // build the {review: [{entry1}, {entry2}, {entry3}]}
-            JsonObject savedRecords = Json.createObjectBuilder()
-                    .add("saved_recipes", savedArray)
-                    .build();
-
-            mp.update(RedisKeys.ccwSavedRecipes, user, savedRecords.toString());
+                mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
+            }
         }
+
     }
 
     public void deleteSavedRecipe(String currentUser, String recipeId) {
@@ -368,25 +308,21 @@ public class RecipeService {
 
         JsonReader jr = Json.createReader(new StringReader(existingSavedRecipes));
         JsonObject savedRecords = jr.readObject();
-        JsonArray savedArray = savedRecords.getJsonArray("recipe_id");
+
+        JsonArray savedArray = savedRecords.getJsonArray("saved_recipes");
 
         JsonArrayBuilder updatedArray = Json.createArrayBuilder();
 
-        // Add the ID that dont matches into updated array then replace it after
-        for (JsonValue value : savedArray) {
+        for (int i = 0; i < savedArray.size(); i++) {
+            JsonObject recipe = savedArray.getJsonObject(i);
 
-            // cast to string to compare if not its cmparing "example" with example
-            // the quiotation marks, so cannot work
-            // replace the '"' with "" to remove the quotation marks
-            String valueString = value.toString().replace("\"", "");
-
-            if (!valueString.toString().equals(recipeId)) {
-                updatedArray.add(value);
+            if (!recipe.getString("idMeal").equals(recipeId)) {
+                updatedArray.add(recipe);
             }
         }
 
-        JsonObject updatedRecords = Json.createObjectBuilder()
-                .add("recipe_id", updatedArray)
+        JsonObject updatedRecords = Json.createObjectBuilder(savedRecords)
+                .add("saved_recipes", updatedArray.build())
                 .build();
 
         mp.update(RedisKeys.ccwSavedRecipes, currentUser, updatedRecords.toString());
@@ -753,14 +689,14 @@ public class RecipeService {
 
     public void saveRecipeById(String user, String recipeId) {
 
-        //Retrieve recipe details first
+        // Retrieve recipe details first
         Recipe recipe = getRecipeDetails(recipeId);
 
         // Check if the user got entries saved in the ccwSavedRecipes
         Boolean ifExists = mp.hashKeyExists(RedisKeys.ccwSavedRecipes, user);
 
-        if (ifExists == true) {
-            // Means have existing basket, so append the entry
+        if (ifExists) {
+            // Existing saved recipes
             String existingSavedRecipes = mp.get(RedisKeys.ccwSavedRecipes, user);
 
             JsonReader jr = Json.createReader(new StringReader(existingSavedRecipes));
@@ -768,132 +704,75 @@ public class RecipeService {
 
             JsonArray savedArray = savedRecords.getJsonArray("saved_recipes");
 
-            // Create Json Object for the new review
-            // the new {entry}
-            JsonObject newSavedRecipe = Json.createObjectBuilder()
-                    .add("idMeal", recipe.getIdMeal())
-                    .add("strMeal", recipe.getStrMeal())
-                    .add("strCategory", recipe.getStrCategory())
-                    .add("strArea", recipe.getStrArea())
-                    .add("strInstructions", recipe.getStrInstructions())
-                    .add("strMealThumb", recipe.getStrMealThumb())
-                    .add("strYoutube", recipe.getStrYoutube())
-                    .add("strIngredient1", recipe.getStrIngredient1())
-                    .add("strIngredient2", recipe.getStrIngredient2())
-                    .add("strIngredient3", recipe.getStrIngredient3())
-                    .add("strIngredient4", recipe.getStrIngredient4())
-                    .add("strIngredient5", recipe.getStrIngredient5())
-                    .add("strIngredient6", recipe.getStrIngredient6())
-                    .add("strIngredient7", recipe.getStrIngredient7())
-                    .add("strIngredient8", recipe.getStrIngredient8())
-                    .add("strIngredient9", recipe.getStrIngredient9())
-                    .add("strIngredient10", recipe.getStrIngredient10())
-                    .add("strIngredient11", recipe.getStrIngredient11())
-                    .add("strIngredient12", recipe.getStrIngredient12())
-                    .add("strIngredient13", recipe.getStrIngredient13())
-                    .add("strIngredient14", recipe.getStrIngredient14())
-                    .add("strIngredient15", recipe.getStrIngredient15())
-                    .add("strIngredient16", recipe.getStrIngredient16())
-                    .add("strIngredient17", recipe.getStrIngredient17())
-                    .add("strIngredient18", recipe.getStrIngredient18())
-                    .add("strIngredient19", recipe.getStrIngredient19())
-                    .add("strIngredient20", recipe.getStrIngredient20())
-                    .add("strMeasure1", recipe.getStrMeasure1())
-                    .add("strMeasure2", recipe.getStrMeasure2())
-                    .add("strMeasure3", recipe.getStrMeasure3())
-                    .add("strMeasure4", recipe.getStrMeasure4())
-                    .add("strMeasure5", recipe.getStrMeasure5())
-                    .add("strMeasure6", recipe.getStrMeasure6())
-                    .add("strMeasure7", recipe.getStrMeasure7())
-                    .add("strMeasure8", recipe.getStrMeasure8())
-                    .add("strMeasure9", recipe.getStrMeasure9())
-                    .add("strMeasure10", recipe.getStrMeasure10())
-                    .add("strMeasure11", recipe.getStrMeasure11())
-                    .add("strMeasure12", recipe.getStrMeasure12())
-                    .add("strMeasure13", recipe.getStrMeasure13())
-                    .add("strMeasure14", recipe.getStrMeasure14())
-                    .add("strMeasure15", recipe.getStrMeasure15())
-                    .add("strMeasure16", recipe.getStrMeasure16())
-                    .add("strMeasure17", recipe.getStrMeasure17())
-                    .add("strMeasure18", recipe.getStrMeasure18())
-                    .add("strMeasure19", recipe.getStrMeasure19())
-                    .add("strMeasure20", recipe.getStrMeasure20())
-                    .build();
+            // Check for duplicates
+            boolean exists = savedArray.stream()
+                    .map(JsonValue::asJsonObject)
+                    .anyMatch(obj -> obj.getString("idMeal").equals(recipe.getIdMeal()));
 
-            // add new entry to the array [{existing entry}, {added entry}]
-            JsonArray updatedReviewArray = Json.createArrayBuilder(savedArray)
-                    .add(newSavedRecipe)
-                    .build();
+            if (!exists) {
+                // Create a new saved recipe JSON object
+                JsonObject newSavedRecipe = Json.createObjectBuilder()
+                        .add("idMeal", recipe.getIdMeal())
+                        .add("strMeal", recipe.getStrMeal())
+                        .add("strCategory", recipe.getStrCategory())
+                        .add("strArea", recipe.getStrArea())
+                        .add("strInstructions", recipe.getStrInstructions())
+                        .add("strMealThumb", recipe.getStrMealThumb())
+                        .add("strYoutube", recipe.getStrYoutube())
+                        .add("strIngredient1", recipe.getStrIngredient1())
+                        .add("strIngredient2", recipe.getStrIngredient2())
+                        .add("strIngredient3", recipe.getStrIngredient3())
+                        .add("strIngredient4", recipe.getStrIngredient4())
+                        .add("strIngredient5", recipe.getStrIngredient5())
+                        .add("strIngredient6", recipe.getStrIngredient6())
+                        .add("strIngredient7", recipe.getStrIngredient7())
+                        .add("strIngredient8", recipe.getStrIngredient8())
+                        .add("strIngredient9", recipe.getStrIngredient9())
+                        .add("strIngredient10", recipe.getStrIngredient10())
+                        .add("strIngredient11", recipe.getStrIngredient11())
+                        .add("strIngredient12", recipe.getStrIngredient12())
+                        .add("strIngredient13", recipe.getStrIngredient13())
+                        .add("strIngredient14", recipe.getStrIngredient14())
+                        .add("strIngredient15", recipe.getStrIngredient15())
+                        .add("strIngredient16", recipe.getStrIngredient16())
+                        .add("strIngredient17", recipe.getStrIngredient17())
+                        .add("strIngredient18", recipe.getStrIngredient18())
+                        .add("strIngredient19", recipe.getStrIngredient19())
+                        .add("strIngredient20", recipe.getStrIngredient20())
+                        .add("strMeasure1", recipe.getStrMeasure1())
+                        .add("strMeasure2", recipe.getStrMeasure2())
+                        .add("strMeasure3", recipe.getStrMeasure3())
+                        .add("strMeasure4", recipe.getStrMeasure4())
+                        .add("strMeasure5", recipe.getStrMeasure5())
+                        .add("strMeasure6", recipe.getStrMeasure6())
+                        .add("strMeasure7", recipe.getStrMeasure7())
+                        .add("strMeasure8", recipe.getStrMeasure8())
+                        .add("strMeasure9", recipe.getStrMeasure9())
+                        .add("strMeasure10", recipe.getStrMeasure10())
+                        .add("strMeasure11", recipe.getStrMeasure11())
+                        .add("strMeasure12", recipe.getStrMeasure12())
+                        .add("strMeasure13", recipe.getStrMeasure13())
+                        .add("strMeasure14", recipe.getStrMeasure14())
+                        .add("strMeasure15", recipe.getStrMeasure15())
+                        .add("strMeasure16", recipe.getStrMeasure16())
+                        .add("strMeasure17", recipe.getStrMeasure17())
+                        .add("strMeasure18", recipe.getStrMeasure18())
+                        .add("strMeasure19", recipe.getStrMeasure19())
+                        .add("strMeasure20", recipe.getStrMeasure20())
+                        .build();
 
-            // rebuild the new json object now
-            JsonObject updatedRecords = Json.createObjectBuilder(savedRecords)
-                    .add("saved_recipes", updatedReviewArray)
-                    .build();
+                // Add the new entry
+                JsonArray updatedReviewArray = Json.createArrayBuilder(savedArray)
+                        .add(newSavedRecipe)
+                        .build();
 
-            mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
+                // Update the JSON object
+                JsonObject updatedRecords = Json.createObjectBuilder(savedRecords)
+                        .add("saved_recipes", updatedReviewArray)
+                        .build();
 
-        } else {
-
-            // means firsst saved enrty, so create it
-            JsonObject newSavedRecipe = Json.createObjectBuilder()
-                    .add("idMeal", recipe.getIdMeal())
-                    .add("strMeal", recipe.getStrMeal())
-                    .add("strCategory", recipe.getStrCategory())
-                    .add("strArea", recipe.getStrArea())
-                    .add("strInstructions", recipe.getStrInstructions())
-                    .add("strMealThumb", recipe.getStrMealThumb())
-                    .add("strYoutube", recipe.getStrYoutube())
-                    .add("strIngredient1", recipe.getStrIngredient1())
-                    .add("strIngredient2", recipe.getStrIngredient2())
-                    .add("strIngredient3", recipe.getStrIngredient3())
-                    .add("strIngredient4", recipe.getStrIngredient4())
-                    .add("strIngredient5", recipe.getStrIngredient5())
-                    .add("strIngredient6", recipe.getStrIngredient6())
-                    .add("strIngredient7", recipe.getStrIngredient7())
-                    .add("strIngredient8", recipe.getStrIngredient8())
-                    .add("strIngredient9", recipe.getStrIngredient9())
-                    .add("strIngredient10", recipe.getStrIngredient10())
-                    .add("strIngredient11", recipe.getStrIngredient11())
-                    .add("strIngredient12", recipe.getStrIngredient12())
-                    .add("strIngredient13", recipe.getStrIngredient13())
-                    .add("strIngredient14", recipe.getStrIngredient14())
-                    .add("strIngredient15", recipe.getStrIngredient15())
-                    .add("strIngredient16", recipe.getStrIngredient16())
-                    .add("strIngredient17", recipe.getStrIngredient17())
-                    .add("strIngredient18", recipe.getStrIngredient18())
-                    .add("strIngredient19", recipe.getStrIngredient19())
-                    .add("strIngredient20", recipe.getStrIngredient20())
-                    .add("strMeasure1", recipe.getStrMeasure1())
-                    .add("strMeasure2", recipe.getStrMeasure2())
-                    .add("strMeasure3", recipe.getStrMeasure3())
-                    .add("strMeasure4", recipe.getStrMeasure4())
-                    .add("strMeasure5", recipe.getStrMeasure5())
-                    .add("strMeasure6", recipe.getStrMeasure6())
-                    .add("strMeasure7", recipe.getStrMeasure7())
-                    .add("strMeasure8", recipe.getStrMeasure8())
-                    .add("strMeasure9", recipe.getStrMeasure9())
-                    .add("strMeasure10", recipe.getStrMeasure10())
-                    .add("strMeasure11", recipe.getStrMeasure11())
-                    .add("strMeasure12", recipe.getStrMeasure12())
-                    .add("strMeasure13", recipe.getStrMeasure13())
-                    .add("strMeasure14", recipe.getStrMeasure14())
-                    .add("strMeasure15", recipe.getStrMeasure15())
-                    .add("strMeasure16", recipe.getStrMeasure16())
-                    .add("strMeasure17", recipe.getStrMeasure17())
-                    .add("strMeasure18", recipe.getStrMeasure18())
-                    .add("strMeasure19", recipe.getStrMeasure19())
-                    .add("strMeasure20", recipe.getStrMeasure20())
-                    .build();
-
-            // add new entry to the array [{existing entry}, {added entry}]
-            JsonArray savedArray = Json.createArrayBuilder().add(newSavedRecipe).build();
-
-            // build the {review: [{entry1}, {entry2}, {entry3}]}
-            JsonObject savedRecords = Json.createObjectBuilder()
-                    .add("saved_recipes", savedArray)
-                    .build();
-
-            mp.update(RedisKeys.ccwSavedRecipes, user, savedRecords.toString());
+                mp.update(RedisKeys.ccwSavedRecipes, user, updatedRecords.toString());
+            }
         }
     }
 }
