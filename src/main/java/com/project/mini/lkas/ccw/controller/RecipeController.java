@@ -101,7 +101,7 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+        rs.saveRecipeById(currentUser, recipeId);
 
         String message = "Recipe has been saved successfully.";
         redirect.addFlashAttribute("message", message);
@@ -117,7 +117,7 @@ public class RecipeController {
         // Get current user
         String currentUser = (String) session.getAttribute("loggedInUser");
 
-        List<Listing> listings = rs.retrieveSavedRecipes(currentUser);
+        List<Recipe> listings = rs.retrieveSavedRecipes(currentUser);
 
         model.addAttribute("listings", listings);
 
@@ -188,7 +188,10 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+
+        Recipe recipe = rs.getRecipeDetails(recipeId);
+
+        rs.saveRecipe(currentUser, recipe);
 
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("tenlistings"));
@@ -271,7 +274,10 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+
+        Recipe recipe = rs.getRecipeDetails(recipeId);
+
+        rs.saveRecipe(currentUser, recipe);
 
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("latestListings"));
@@ -291,7 +297,10 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+
+        Recipe recipe = rs.getRecipeDetails(recipeId);
+
+        rs.saveRecipe(currentUser, recipe);
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("searchListings"));
 
@@ -313,7 +322,10 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+
+        Recipe recipe = rs.getRecipeDetails(recipeId);
+
+        rs.saveRecipe(currentUser, recipe);
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("ingredientsListing"));
 
@@ -362,7 +374,10 @@ public class RecipeController {
 
         // Get user, send user and recipe ID to redis
         String currentUser = (String) session.getAttribute("loggedInUser");
-        rs.saveRecipe(currentUser, recipeId);
+
+        Recipe recipe = rs.getRecipeDetails(recipeId);
+
+        rs.saveRecipe(currentUser, recipe);
         // retrieve from saved attributed to show the same list of recipes
         model.addAttribute("listings", session.getAttribute("letterListing"));
 
