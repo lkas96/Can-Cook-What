@@ -15,7 +15,7 @@
         <p th:text="'Error Code: ' + ${status}"></p>
         <p th:text="'Message: ' + ${error}"></p>
         <p th:if="${timestamp != null}" th:text="'Timestamp: ' + ${timestamp}"></p>
-        <a th:href="/home" class="btn btn-primary mt-3">Go to Homepage</a>
+        <a th:href="${/home}" class="btn btn-primary mt-3">Go to Homepage</a>
     </div>
 
     <script 
