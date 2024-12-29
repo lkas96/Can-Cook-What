@@ -27,9 +27,10 @@ public class HomeController {
     @GetMapping()
     public String displayHome(Model model, HttpSession session) {
         String currentUserEmail = (String) session.getAttribute("loggedInUser");
-
+        String name = (String) session.getAttribute("currentUserName");
+        
         // greet user with welcome message
-        String welcomeMessage = "Welcome " + currentUserEmail + "!";
+        String welcomeMessage = "Welcome " + name + "!";
         model.addAttribute("welcomeMessage", welcomeMessage);
 
         //random recipe of the day

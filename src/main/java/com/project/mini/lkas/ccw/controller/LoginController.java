@@ -69,6 +69,7 @@ public class LoginController {
 
             //Success, let them log in
             session.setAttribute("loggedInUser", login.getEmail());
+            session.setAttribute("currentUserName", ls.getName(login.getEmail()));
 
             return new RedirectView("/home");
         }

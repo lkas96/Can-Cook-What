@@ -51,4 +51,15 @@ public class LoginService {
         }
     }
 
+    public Object getName(String email) {
+        //add for homepge suer on greeting.
+
+        String userDetails = mp.get(RedisKeys.ccwUsers, email);
+
+        JsonReader jr = Json.createReader(new StringReader(userDetails));
+        JsonObject jo = jr.readObject();
+
+        return jo.getString("name");
+    }
+
 }
