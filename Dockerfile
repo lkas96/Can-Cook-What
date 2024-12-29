@@ -30,4 +30,4 @@ ENV SERVER_PORT=3232
 
 EXPOSE ${SERVER_PORT}
 
-ENTRYPOINT ["java", "-jar", "CanCookWhat.jar"]
+ENTRYPOINT SERVER_PORT=${SERVER_PORT} java -jar target/can-cook-what-1.0-RELEASE.jar
