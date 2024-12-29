@@ -1,6 +1,7 @@
 package com.project.mini.lkas.ccw.service;
 
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,26 @@ public class UserService {
         String retrievedName = jo.getString("name");
 
         return retrievedName;
+    }
+
+    public List<User> getAllUsers() {
+        List<Object> usersObject = mp.getValues(RedisKeys.ccwUsers);
+        List<User> users = new ArrayList<>();
+
+        //custom manual serializing
+        for (Object userObject : usersObject) {
+            JsonReader jr = Json.createReader(new StringReader(userObject.toString()));
+            JsonObject jo = jr.readObject();
+
+            User user = new User();
+            user.setName(jo.getString("name"));
+            user.setEmail(jo.getString("email"));
+            user.setPassword(jo.getString("password"));
+
+            users.add(user);
+        }
+
+        return users;
     }
 
 }
