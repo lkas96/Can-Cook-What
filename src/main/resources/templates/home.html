@@ -16,7 +16,8 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
     <div class="container-fluid">
-      <a class="navbar-brand" th:href="@{/home}">CanCookWhat</a>
+      
+      <a class="navbar-brand" th:href="@{/home}"><img src="/images/OrangeIconOutline.svg" alt="CanCookWhat" height="50"> CanCookWhat </a>
       <button
         class="navbar-toggler"
         type="button"
@@ -119,6 +120,7 @@
       </div>
     </div>
   </nav>
+  
   <div class="container">
     <br>
     <h1 th:utext="${welcomeMessage}"></h1>

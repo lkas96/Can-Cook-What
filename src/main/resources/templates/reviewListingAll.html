@@ -15,111 +15,112 @@
 
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" th:href="@{/home}">CanCookWhat</a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-  
-            <!-- Item 2-->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle "
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Basket
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" th:href="@{/basket}">My Baskets</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/basket/create}">Create a Basket</a>
-                </li>
-              </ul>
-            </li>
-  
-            <!-- Item 3-->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Recipes
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/latest}">Latest Added Recipes</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/search}">Search or Browse for Recipes</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/randomOne}">1 Random Recipe</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/recipe/randomTen}">10 Random Recipes</a>
-                </li>
-              </ul>
-            </li>
-  
-            <!-- Item 4-->
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Reviews
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" th:href="@{/review/community}">Community Reviews</a>
-                </li>
-                </li>
-              </ul>
-            </li>
-            <!-- Item 5-->
-            <li class="nav-item">
-              <a class="nav-link" aria-current="page" th:href="@{/ingredients}">Ingredient Database</a>
-            </li>
-            
-          </ul>
-          <div class="d-flex">
-            <a class="btn btn-outline-light" target="_blank" href="https://cancookwhatcommunity.blogspot.com/">Blog Reviews</a>&nbsp;&nbsp;&nbsp;
-            <a class="btn btn-danger" th:href="@{/logout}">Logout</a>
-          </div>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      
+      <a class="navbar-brand" th:href="@{/home}"><img src="/images/OrangeIconOutline.svg" alt="CanCookWhat" height="50"> CanCookWhat </a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          <!-- Item 2-->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle "
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Basket
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" th:href="@{/basket}">My Baskets</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/basket/create}">Create a Basket</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Item 3-->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Recipes
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/saved}">My Saved Recipes</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/latest}">Latest Added Recipes</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/basket}">Find a Recipe using Basket</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/search}">Search or Browse for Recipes</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/randomOne}">1 Random Recipe</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/recipe/randomTen}">10 Random Recipes</a>
+              </li>
+            </ul>
+          </li>
+
+          <!-- Item 4-->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Reviews
+            </a>
+            <ul class="dropdown-menu">
+              <li>
+                <a class="dropdown-item" th:href="@{/review/myreviews}">My Reviews</a>
+              </li>
+              <li>
+                <a class="dropdown-item" th:href="@{/review/community}">Community Reviews</a>
+              </li>
+              </li>
+            </ul>
+          </li>
+          <!-- Item 5-->
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" th:href="@{/ingredients}">Ingredient Database</a>
+          </li>
+          
+        </ul>
+        <div class="d-flex">
+          <a class="btn btn-outline-light" target="_blank" href="https://cancookwhatcommunity.blogspot.com/">Blog Reviews</a>&nbsp;&nbsp;&nbsp;
+          <a class="btn btn-danger" th:href="@{/logout}">Logout</a>
         </div>
       </div>
-    </nav>
+    </div>
+  </nav>
 
     <div class="container">
       <br>
