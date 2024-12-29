@@ -611,6 +611,10 @@ public class RecipeService {
         // if yes, return the count
         // if no, return 0
 
+        if (!mp.hashKeyExists(RedisKeys.ccwContainers, user)) {
+            return 0;
+        }
+        
         String existingBasketJson = mp.get(RedisKeys.ccwContainers, user);
 
         if (existingBasketJson != null) {

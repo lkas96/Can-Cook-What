@@ -516,7 +516,7 @@ public class ReviewService {
                 .add("reviews", updatedArray)
                 .build();
 
-        mp.update(RedisKeys.ccwContainers, currentUser, updatedRecords.toString());
+        mp.update(RedisKeys.ccwReviews, currentUser, updatedRecords.toString());
         
         return true;
     }
@@ -642,6 +642,9 @@ public class ReviewService {
                         .build();
 
                 updatedReviewsBuilder.add(updatedReview);
+            } else {
+
+                updatedReviewsBuilder.add(aReview);
             }
         }
 
