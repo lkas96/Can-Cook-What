@@ -171,9 +171,8 @@
       <table width="100%">
         <thead>
           <tr>
-            <th colspan="2"><h1>Ingredient Database</h1></th>
-            <th colspan="2" style="text-align: end">
-              <h1>Count: <span th:text="${ingredients.size()}"></span></h1>
+            <th colspan="4"><h1>Ingredient Database</h1>
+              <h5>(Count: <span th:text="${ingredients.size()}"></span>)</h5>
             </th>
           </tr>
         </thead>
@@ -199,7 +198,7 @@
                 >
                   <span
                     th:utext="${ingredients[rows.index + i].name}"
-                    style="font-weight: bold; color: black"
+                    style="color: black"
                   ></span>
                 </a>
                 <br /><br />
