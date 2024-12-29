@@ -10,7 +10,7 @@ COPY mvnw.cmd .
 COPY src src
 COPY .mvn .mvn
 
-# RUN chmod a+x ./mvnw
+RUN chmod a+x ./mvnw
 RUN ./mvnw clean package -Dmaven.skip.tests=true
 
 ENV SERVER_PORT=3232
